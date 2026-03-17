@@ -15,6 +15,18 @@ app.use(express.json());
 
 // Content Security Policy (CSP) to fix console errors
 app.use((req, res, next) => {
+    const allowedOrigins = [
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'https://om-services.onrender.com', // Replace with your actual Render URL
+        /\.vercel\.app$/ // Allows any Vercel deployment
+    ];
+
+    const origin = req.headers.origin;
+    if (allowedOrigins.some(ao => (typeof ao === 'string' && ao === origin) || (ao instanceof RegExp && ao.test(origin)))) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+
     res.setHeader(
         'Content-Security-Policy',
         "default-src 'self' evolved-boa-1.accounts.dev evolved-boa-1.clerk.accounts.dev cdn.jsdelivr.net js.sentry-cdn.com browser.sentry-cdn.com *.sentry.io challenges.cloudflare.com scdn.clerk.com segapi.clerk.com https://*.protect.clerk.com https://*.client.protect.clerk.com https://clerk-telemetry.com https://clerk.com https://api.stripe.com https://maps.googleapis.com https://*.js.stripe.com https://js.stripe.com https://img.clerk.com https://images.clerk.dev https://images.clerkstage.dev; " +
@@ -24,6 +36,8 @@ app.use((req, res, next) => {
         "img-src 'self' data: https://img.clerk.com https://images.clerk.dev https://i.imgur.com; " +
         "connect-src 'self' https://*.clerk.accounts.dev https://clerk-telemetry.com https://*.clerk.com https://clerk.com;"
     );
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
 app.use(express.static(path.join(__dirname, '.')));
@@ -63,15 +77,19 @@ async function connectMongoDB() {
         console.log('📊 Database:', mongoose.connection.name);
 
         try {
-            // Fix: Drop problematic legacy 'username' index if it exists
-            const collections = await mongoose.connection.db.listCollections({ name: 'users' }).toArray();
-            if (collections.length > 0) {
-                const usersCollection = mongoose.connection.db.collection('users');
-                const indexes = await usersCollection.indexes();
-                if (indexes.some(idx => idx.name === 'username_1')) {
-                    await usersCollection.dropIndex('username_1');
-                    console.log('🗑️ Dropped legacy unique username index');
+            // Wait for the connection to be fully established and the DB object to be available
+            if (mongoose.connection.db) {
+                const collections = await mongoose.connection.db.listCollections({ name: 'users' }).toArray();
+                if (collections.length > 0) {
+                    const usersCollection = mongoose.connection.db.collection('users');
+                    const indexes = await usersCollection.indexes();
+                    if (indexes.some(idx => idx.name === 'username_1')) {
+                        await usersCollection.dropIndex('username_1');
+                        console.log('🗑️ Dropped legacy unique username index');
+                    }
                 }
+            } else {
+                console.log('⚠️ MongoDB connection db object not ready for index check');
             }
         } catch (e) {
             console.log('⚠️ Index cleanup info:', e.message);
