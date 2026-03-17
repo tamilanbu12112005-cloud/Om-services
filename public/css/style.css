@@ -1074,3 +1074,69 @@ select.form-control-premium option {
     box-shadow: 0 5px 20px rgba(252, 220, 59, 0.4);
     background: #ffe35c;
 }
+
+/* --- Mobile Responsiveness (Bootstrap Breakpoints) --- */
+@media (max-width: 991px) {
+    nav.navbar {
+        border-radius: 20px;
+        margin: 10px auto;
+        padding: 5px 15px;
+    }
+
+    .nav-menu-group {
+        flex-direction: column;
+        background: none;
+        border: none;
+        padding: 20px 0;
+        gap: 10px;
+        width: 100%;
+        align-items: center;
+    }
+
+    .nav-link {
+        width: 100%;
+        text-align: center;
+        padding: 12px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .content-box h1 {
+        font-size: 2.8rem !important;
+        letter-spacing: 3px !important;
+    }
+
+    .content-box .subheading {
+        font-size: 1.2rem !important;
+    }
+
+    .navbar-collapse {
+        background: rgba(30, 5, 35, 0.95);
+        backdrop-filter: blur(15px);
+        margin-top: 15px;
+        border-radius: 15px;
+        padding: 15px;
+        border: 1px solid rgba(252, 220, 59, 0.1);
+    }
+}
+
+@media (max-width: 576px) {
+    .content-box {
+        padding: 40px 15px;
+    }
+
+    .content-box h1 {
+        font-size: 2.2rem !important;
+    }
+    
+    .service-card-glass {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .service-img-glass {
+        margin: 0 0 15px 0;
+        width: 100px;
+        height: 100px;
+    }
+}

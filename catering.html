@@ -27,23 +27,48 @@
 
 <body>
     <!-- Navbar -->
+    <!-- Ultimate Navbar -->
     <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
+        <div class="container-fluid">
+            <!-- Logo -->
             <a class="navbar-brand" href="index.html">
                 <img src="logo-removebg-preview.png" alt="OM Service Logo">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+
+            <!-- Mobile Toggler -->
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#ultimateNav">
+                <i class="fas fa-bars text-gold fs-2"></i>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="catering.html">Catering</a></li>
-                    <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                </ul>
-                <div class="navbar-nav ms-auto">
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse" id="ultimateNav">
+                <div class="nav-menu-group mx-auto">
+                    <a class="nav-link home-btn" href="index.html">
+                        <i class="fas fa-home"></i> HOME
+                    </a>
+                    <a class="nav-link active" href="catering.html">
+                        <i class="fas fa-utensils"></i> CATERING
+                    </a>
+                    <a class="nav-link" href="contact.html">
+                        <i class="fas fa-phone-alt"></i> CONTACT
+                    </a>
+                    <a class="nav-link" href="about.html">
+                        <i class="fas fa-info-circle"></i> ABOUT US
+                    </a>
+                    <a class="nav-link" href="reviews.html">
+                        <i class="fas fa-star"></i> REVIEWS
+                    </a>
+                    <a class="nav-link" href="user-dashboard.html">
+                        <i class="fas fa-tachometer-alt"></i> DASHBOARD
+                    </a>
+                </div>
+
+                <!-- Right Side -->
+                <div class="d-flex align-items-center justify-content-center gap-3 mt-3 mt-lg-0">
                     <div id="user-button"></div>
+                    <a href="join.html" class="join-us-btn">
+                        JOIN US
+                    </a>
                 </div>
             </div>
         </div>

@@ -165,20 +165,13 @@
             </a>
 
             <!-- Mobile Toggler -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ultimateNav">
-                <span class="bi bi-list"></span>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#ultimateNav">
+                <i class="fas fa-bars text-gold fs-2"></i>
             </button>
 
             <!-- Menu -->
-            <div class="collapse navbar-collapse justify-content-between" id="ultimateNav">
-                <!-- Centered Nav Group - Removed mx-auto to close gap, added ms-auto/me-4 if needed for center alignment but user wants less space -->
+            <div class="collapse navbar-collapse" id="ultimateNav">
                 <div class="nav-menu-group mx-auto">
-                    <!-- Keep mx-auto for center, but container-fluid with limited width helps. 
-                        User wants to "remove unwanted space". The gap between menu and right side is large. 
-                        Using justify-content: center on collapse or gap might be better if we remove the spreading.
-                        Let's try: Removing mx-auto and using regular flow with gaps? 
-                        The screenshot shows huge gap. 
-                        Let's try standard spacing. -->
                     <a class="nav-link home-btn active" href="index.html">
                         <i class="fas fa-home"></i> HOME
                     </a>
@@ -197,11 +190,10 @@
                     <a class="nav-link" href="user-dashboard.html">
                         <i class="fas fa-tachometer-alt"></i> DASHBOARD
                     </a>
-
                 </div>
 
                 <!-- Right Side -->
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center justify-content-center gap-3 mt-3 mt-lg-0">
                     <div id="user-button" style="color: white;"></div>
                     <a href="join.html" class="join-us-btn">
                         JOIN US
@@ -634,6 +626,19 @@
                 console.error(err);
                 document.getElementById('home-reviews-container').innerHTML = '';
             }
+        }
+    </script>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function showCardPopup() {
+            // Placeholder for visiting card logic
+            alert("Visiting Card feature coming soon!");
+        }
+        function navigateTo(url) {
+            window.location.href = url;
         }
     </script>
 </body>
