@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 
     res.setHeader(
         'Content-Security-Policy',
-        "default-src 'self' evolved-boa-1.accounts.dev evolved-boa-1.clerk.accounts.dev cdn.jsdelivr.net js.sentry-cdn.com browser.sentry-cdn.com *.sentry.io challenges.cloudflare.com scdn.clerk.com segapi.clerk.com https://*.protect.clerk.com https://*.client.protect.clerk.com https://clerk-telemetry.com https://clerk.com https://api.stripe.com https://maps.googleapis.com https://*.js.stripe.com https://js.stripe.com https://img.clerk.com https://images.clerk.dev https://images.clerkstage.dev; " +
+        "default-src 'self' moved-primate-4.accounts.dev moved-primate-4.clerk.accounts.dev cdn.jsdelivr.net js.sentry-cdn.com browser.sentry-cdn.com *.sentry.io challenges.cloudflare.com scdn.clerk.com segapi.clerk.com https://*.protect.clerk.com https://*.client.protect.clerk.com https://clerk-telemetry.com https://clerk.com https://api.stripe.com https://maps.googleapis.com https://*.js.stripe.com https://js.stripe.com https://img.clerk.com https://images.clerk.dev https://images.clerkstage.dev; " +
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.clerk.accounts.dev https://challenges.cloudflare.com https://clerk.com; " +
         "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com; " +
         "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; " +
