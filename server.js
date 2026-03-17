@@ -18,8 +18,8 @@ app.use((req, res, next) => {
     const allowedOrigins = [
         'http://localhost:3000',
         'http://localhost:3001',
-        'https://om-services.onrender.com', // Replace with your actual Render URL
-        /\.vercel\.app$/ // Allows any Vercel deployment
+        'https://om-services.onrender.com',
+        /\.vercel\.app$/
     ];
 
     const origin = req.headers.origin;
@@ -28,16 +28,20 @@ app.use((req, res, next) => {
     }
 
     res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization, X-Requested-With, proxy-connection, Connection, User-Agent, Accept, Origin, Accept-Encoding, Accept-Language'
+    );
+
+    res.setHeader(
         'Content-Security-Policy',
-        "default-src 'self' moved-primate-4.accounts.dev moved-primate-4.clerk.accounts.dev cdn.jsdelivr.net js.sentry-cdn.com browser.sentry-cdn.com *.sentry.io challenges.cloudflare.com scdn.clerk.com segapi.clerk.com https://*.protect.clerk.com https://*.client.protect.clerk.com https://clerk-telemetry.com https://clerk.com https://api.stripe.com https://maps.googleapis.com https://*.js.stripe.com https://js.stripe.com https://img.clerk.com https://images.clerk.dev https://images.clerkstage.dev; " +
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.clerk.accounts.dev https://challenges.cloudflare.com https://clerk.com; " +
+        "default-src 'self' https://*.clerk.accounts.dev https://clerk.com https://*.clerk.com; " +
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.clerk.accounts.dev https://clerk.com https://challenges.cloudflare.com; " +
         "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com; " +
         "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; " +
-        "img-src 'self' data: https://img.clerk.com https://images.clerk.dev https://i.imgur.com; " +
+        "img-src 'self' data: https://img.clerk.com https://images.clerk.dev https://i.imgur.com https://images.clerkstage.dev; " +
         "connect-src 'self' https://*.clerk.accounts.dev https://clerk-telemetry.com https://*.clerk.com https://clerk.com;"
     );
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
 app.use(express.static(path.join(__dirname, '.')));
