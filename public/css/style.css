@@ -853,14 +853,19 @@ select.form-control-premium option {
 
 /* Utilities needed for other pages */
 .text-gold { color: #fcdc3b !important; }
-.btn-primary-glow { background: transparent; color: #fcdc3b; border: 2px solid #fcdc3b; padding: 12px 30px; border-radius: 50px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: inline-block; }
-.btn-primary-glow:hover { background: #fcdc3b; color: #000; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(252, 220, 59, 0.3); }
-.btn-secondary-glow { background: transparent; color: white; border: 2px solid white; padding: 12px 30px; border-radius: 50px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: inline-block; }
-.btn-secondary-glow:hover { background: white; color: #000; transform: translateY(-2px); }
+.btn-primary-glow { background: transparent; color: #fcdc3b; border: 2px solid #fcdc3b; padding: 12px 30px; border-radius: 50px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: inline-block; }
+.btn-primary-glow:hover { background: #fcdc3b; color: #000; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(252, 220, 59, 0.4); }
+.btn-secondary-glow { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.7); padding: 12px 30px; border-radius: 50px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: inline-block; font-size: 1rem; }
+.btn-secondary-glow:hover { background: white; color: #000; transform: translateY(-2px); border-color: white; }
+.btn-gold-glow { background: transparent; color: #fcdc3b; border: 2px solid #fcdc3b; padding: 12px 30px; border-radius: 50px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; cursor: pointer; text-decoration: none; display: inline-block; font-size: 1rem; }
+.btn-gold-glow:hover { background: #fcdc3b; color: #000; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(252, 220, 59, 0.4); }
 .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 3rem 2rem; margin: 2rem 0; }
 .service-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; overflow: hidden; transition: all 0.3s ease; height: 100%; }
 .service-card:hover { transform: translateY(-10px); border-color: #fcdc3b; box-shadow: 0 20px 40px rgba(252, 220, 59, 0.2); }
 .hover-lift:hover { transform: translateY(-5px); }
+
+.bg-gold { background-color: #fcdc3b !important; }
+.text-white-50 { color: rgba(255, 255, 255, 0.8) !important; font-size: 1.05rem; }
 
 /* Slideshow Styles */
 .slideshow-container {

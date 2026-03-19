@@ -16,226 +16,226 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 24px;
-            background: linear-gradient(135deg, #501F56, #19021C);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.13);
-            position: relative;
-            z-index: 99;
-        }
+            nav {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 15px 24px;
+                background: linear-gradient(135deg, #501F56, #19021C);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+                position: relative;
+                z-index: 99;
+            }
 
-        .logo img {
-            height: 48px;
-            width: 48px;
-            object-fit: cover;
-        }
+            .logo img {
+                height: 48px;
+                width: 48px;
+                object-fit: cover;
+            }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 26px;
-            font-weight: bold;
-            margin: 0;
-        }
+            nav ul {
+                list-style: none;
+                display: flex;
+                gap: 26px;
+                font-weight: bold;
+                margin: 0;
+            }
 
-        nav ul li {
-            position: relative;
-            cursor: pointer;
-            font-weight: 900;
-            padding: 6px 10px;
-            font-size: 1rem;
-            transition: color 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 17px;
-            display: inline-block;
-        }
+            nav ul li {
+                position: relative;
+                cursor: pointer;
+                font-weight: 900;
+                padding: 6px 10px;
+                font-size: 1rem;
+                transition: color 0.3s;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                border-radius: 17px;
+                display: inline-block;
+            }
 
-        nav ul li::after {
-            content: "";
-            display: block;
-            position: absolute;
-            left: 20%;
-            bottom: 2px;
-            width: 60%;
-            height: 3px;
-            background: #fcdc3b;
-            border-radius: 2px;
-            transform: scaleX(0);
-            transition: transform 0.3s;
-        }
+            nav ul li::after {
+                content: "";
+                display: block;
+                position: absolute;
+                left: 20%;
+                bottom: 2px;
+                width: 60%;
+                height: 3px;
+                background: #fcdc3b;
+                border-radius: 2px;
+                transform: scaleX(0);
+                transition: transform 0.3s;
+            }
 
-        nav ul li:hover {
-            color: #fcdc3b;
-            background: rgba(252, 220, 59, 0.08);
-        }
+            nav ul li:hover {
+                color: #fcdc3b;
+                background: rgba(252, 220, 59, 0.08);
+            }
 
-        nav ul li:hover::after {
-            transform: scaleX(1);
-        }
+            nav ul li:hover::after {
+                transform: scaleX(1);
+            }
 
-        .joi {
-            padding: 6px 20px;
-            background-color: gold;
-            color: black;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: bold;
-            display: inline-block;
-            margin-top: 4px;
-            box-shadow: 0 4px 18px #fcdc3b59;
-            letter-spacing: 1px;
-        }
+            .joi {
+                padding: 6px 20px;
+                background-color: gold;
+                color: black;
+                border-radius: 30px;
+                font-size: 1rem;
+                font-weight: bold;
+                display: inline-block;
+                margin-top: 4px;
+                box-shadow: 0 4px 18px #fcdc3b59;
+                letter-spacing: 1px;
+            }
 
-        .header-section {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+            .header-section {
+                text-align: center;
+                margin-bottom: 40px;
+            }
 
-        .header-section h1 {
-            font-weight: 800;
-            font-size: 3rem;
-            color: #fcdc3b;
-        }
+            .header-section h1 {
+                font-weight: 800;
+                font-size: 3rem;
+                color: #fcdc3b;
+            }
 
-        .header-section p {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
+            .header-section p {
+                font-size: 1.1rem;
+                color: rgba(255, 255, 255, 0.8);
+            }
 
-        .btn-add-review {
-            background-color: #fcdc3b;
-            color: #3a1d59;
-            font-weight: 700;
-            border-radius: 12px;
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            border: none;
-            transition: all 0.3s ease;
-        }
+            .btn-add-review {
+                background-color: #fcdc3b;
+                color: #3a1d59;
+                font-weight: 700;
+                border-radius: 12px;
+                padding: 12px 25px;
+                font-size: 1.1rem;
+                border: none;
+                transition: all 0.3s ease;
+            }
 
-        .btn-add-review:hover {
-            background-color: #e0bf2e;
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(252, 220, 59, 0.3);
-        }
+            .btn-add-review:hover {
+                background-color: #e0bf2e;
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(252, 220, 59, 0.3);
+            }
 
-        .review-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 25px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+            .review-card {
+                background: rgba(255, 255, 255, 0.08);
+                backdrop-filter: blur(15px);
+                border-radius: 20px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 25px;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
 
-        .review-card .review-img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
+            .review-card .review-img {
+                width: 100%;
+                max-height: 250px;
+                object-fit: cover;
+                border-radius: 12px;
+                margin-bottom: 15px;
+            }
 
-        .review-card .review-text {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-            flex-grow: 1;
-        }
+            .review-card .review-text {
+                font-size: 1rem;
+                color: rgba(255, 255, 255, 0.9);
+                flex-grow: 1;
+            }
 
-        .review-footer {
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+            .review-footer {
+                margin-top: auto;
+                padding-top: 15px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
 
-        .star-rating .fa-star {
-            color: #6c757d;
-        }
+            .star-rating .fa-star {
+                color: #6c757d;
+            }
 
-        .star-rating .fa-star.filled {
-            color: #fcdc3b;
-        }
+            .star-rating .fa-star.filled {
+                color: #fcdc3b;
+            }
 
-        .like-button {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+            .like-button {
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: #fff;
+                padding: 8px 15px;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
 
-        .like-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
+            .like-button:hover {
+                background: rgba(255, 255, 255, 0.2);
+            }
 
-        .like-button.liked {
-            background-color: #fcdc3b;
-            color: #3a1d59;
-            border-color: #fcdc3b;
-            cursor: not-allowed;
-        }
+            .like-button.liked {
+                background-color: #fcdc3b;
+                color: #3a1d59;
+                border-color: #fcdc3b;
+                cursor: not-allowed;
+            }
 
-        /* Cancel Button */
-        .cancel-button {
-            background: transparent;
-            border: none;
-            color: #f66;
-            font-size: 1.2rem;
-            margin-left: 10px;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
+            /* Cancel Button */
+            .cancel-button {
+                background: transparent;
+                border: none;
+                color: #f66;
+                font-size: 1.2rem;
+                margin-left: 10px;
+                cursor: pointer;
+                transition: color 0.3s ease;
+            }
 
-        .cancel-button:hover {
-            color: #ff0000;
-        }
+            .cancel-button:hover {
+                color: #ff0000;
+            }
 
-        /* Modal Styling */
-        .modal-content {
-            background: #3b173f;
-            border: 1px solid #fcdc3b;
-            color: white;
-        }
+            /* Modal Styling */
+            .modal-content {
+                background: #3b173f;
+                border: 1px solid #fcdc3b;
+                color: white;
+            }
 
-        .modal-header {
-            border-bottom: 1px solid rgba(252, 220, 59, 0.3);
-        }
+            .modal-header {
+                border-bottom: 1px solid rgba(252, 220, 59, 0.3);
+            }
 
-        .modal-title {
-            color: #fcdc3b;
-        }
+            .modal-title {
+                color: #fcdc3b;
+            }
 
-        .star-input .fa-star {
-            font-size: 1.8rem;
-            color: #6c757d;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
+            .star-input .fa-star {
+                font-size: 1.8rem;
+                color: #6c757d;
+                cursor: pointer;
+                transition: color 0.2s;
+            }
 
-        .btn-clear {
-            background: transparent;
-            border: none;
-            color: #fcdc3b;
-            font-size: 1.2rem;
-            cursor: pointer;
-            float: right;
-            margin-bottom: 10px;
-        }
+            .btn-clear {
+                background: transparent;
+                border: none;
+                color: #fcdc3b;
+                font-size: 1.2rem;
+                cursor: pointer;
+                float: right;
+                margin-bottom: 10px;
+            }
 
-        .btn-clear:hover {
-            color: #fff;
-        }
+            .btn-clear:hover {
+                color: #fff;
+            }
     </style>
 </head>
 
@@ -307,6 +307,8 @@
         </div>
     </div>
 
+    <script src="js/premium-notify.js"></script>
+    <script src="js/auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -318,8 +320,18 @@
             const clearReviewBtn = document.getElementById('clearReviewBtn');
 
             let currentRating = 0;
-            let reviews = JSON.parse(localStorage.getItem('userReviews')) || [];
             let likedReviews = JSON.parse(localStorage.getItem('likedReviews')) || [];
+
+            // --- Fetch Reviews from API ---
+            async function fetchReviews() {
+                try {
+                    const res = await fetch('/api/reviews');
+                    const reviews = await res.json();
+                    renderReviews(reviews);
+                } catch (err) {
+                    console.error('Failed to fetch reviews:', err);
+                }
+            }
 
             // --- Clear Button Logic ---
             clearReviewBtn.addEventListener('click', () => {
@@ -367,6 +379,11 @@
                     return;
                 }
 
+                if (!window.__authUser) {
+                    alert('Please sign in to leave a review.');
+                    return;
+                }
+
                 const description = document.getElementById('reviewDescription').value;
                 const rating = currentRating;
                 const imageFile = document.getElementById('reviewImage').files[0];
@@ -377,69 +394,97 @@
                 }
 
                 const newReview = {
-                    id: Date.now().toString(),
-                    description: description,
+                    email: window.__authUser.email,
+                    name: window.__authUser.name || window.__authUser.email.split('@')[0],
+                    comment: description,
                     image: imageBase64,
                     rating: rating,
-                    likes: 0,
-                    timestamp: new Date().toISOString()
+                    serviceType: 'General' // Default service type
                 };
 
-                reviews.unshift(newReview);
-                saveReviews();
-                renderReviews();
+                try {
+                    const res = await fetch('/api/reviews', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newReview)
+                    });
+                    const data = await res.json();
 
-                reviewModal.hide();
-                this.reset();
-                currentRating = 0;
-                resetStars();
-                stars.forEach(s => s.addEventListener('mouseout', resetStars));
+                    if (data.success) {
+                        fetchReviews();
+                        reviewModal.hide();
+                        this.reset();
+                        currentRating = 0;
+                        resetStars();
+                        stars.forEach(s => s.addEventListener('mouseout', resetStars));
+                    }
+                } catch (err) {
+                    console.error('Failed to post review:', err);
+                    alert('Error saving review. Please try again.');
+                }
             });
 
             // --- Like / Cancel Button Logic ---
-            reviewsContainer.addEventListener('click', function (e) {
+            reviewsContainer.addEventListener('click', async function (e) {
                 // Like Button
                 const likeBtn = e.target.closest('.like-button');
                 if (likeBtn) {
                     const reviewId = likeBtn.dataset.reviewId;
                     if (!likedReviews.includes(reviewId)) {
-                        const reviewToLike = reviews.find(r => r.id === reviewId);
-                        if (reviewToLike) {
-                            reviewToLike.likes++;
-                            likedReviews.push(reviewId);
-                            saveReviews();
-                            saveLikedReviews();
-                            renderReviews();
+                        try {
+                            const currentLikes = parseInt(likeBtn.innerText.trim()) || 0;
+                            const res = await fetch(`/api/reviews/${reviewId}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ likes: currentLikes + 1 })
+                            });
+                            if (res.ok) {
+                                likedReviews.push(reviewId);
+                                localStorage.setItem('likedReviews', JSON.stringify(likedReviews));
+                                fetchReviews();
+                            }
+                        } catch (err) {
+                            console.error('Like error:', err);
                         }
                     }
                     return;
                 }
 
-                // Cancel Button
+                // Delete Button
                 const cancelBtn = e.target.closest('.cancel-button');
                 if (cancelBtn) {
                     const reviewId = cancelBtn.dataset.reviewId;
-                    if (confirm("Are you sure you want to delete this review?")) {
-                        reviews = reviews.filter(r => r.id !== reviewId);
-                        likedReviews = likedReviews.filter(id => id !== reviewId);
-                        saveReviews();
-                        saveLikedReviews();
-                        renderReviews();
+                    const reviewEmail = cancelBtn.dataset.email;
+
+                    if (window.__authUser && (window.__authUser.email === reviewEmail)) {
+                        if (await confirmReplacement("Are you sure you want to delete your review?")) {
+                            try {
+                                const res = await fetch(`/api/reviews/${reviewId}`, { method: 'DELETE' });
+                                if (res.ok) {
+                                    fetchReviews();
+                                }
+                            } catch (err) {
+                                console.error('Delete error:', err);
+                            }
+                        }
+                    } else {
+                        alert("You can only delete your own reviews.");
                     }
                 }
             });
 
             // --- Render Logic ---
-            function renderReviews() {
+            function renderReviews(reviews) {
                 reviewsContainer.innerHTML = '';
-                if (reviews.length === 0) {
+                if (!reviews || reviews.length === 0) {
                     noReviewsMessage.classList.remove('d-none');
                     return;
                 }
                 noReviewsMessage.classList.add('d-none');
 
                 reviews.forEach(review => {
-                    const isLiked = likedReviews.includes(review.id);
+                    const isLiked = likedReviews.includes(review._id);
+                    const isOwner = window.__authUser && window.__authUser.email === review.email;
                     const card = document.createElement('div');
                     card.className = 'col-lg-4 col-md-6 d-flex';
 
@@ -452,30 +497,27 @@
                     card.innerHTML = `
                         <div class="review-card">
                             ${imageHTML}
-                            <p class="review-text">"${review.description}"</p>
+                            <div class="mb-2">
+                                <span class="text-gold fw-bold">${review.name}</span>
+                                <small class="text-white-50 float-end">${new Date(review.createdAt).toLocaleDateString()}</small>
+                            </div>
+                            <p class="review-text">"${review.comment}"</p>
                             <div class="review-footer">
                                 <div class="star-rating">${starsHTML}</div>
                                 <div>
-                                    <button class="like-button ${isLiked ? 'liked' : ''}" data-review-id="${review.id}">
-                                        <i class="fas fa-thumbs-up"></i> ${review.likes}
+                                    <button class="like-button ${isLiked ? 'liked' : ''}" data-review-id="${review._id}">
+                                        <i class="fas fa-thumbs-up"></i> ${review.likes || 0}
                                     </button>
-                                    <button class="cancel-button" data-review-id="${review.id}">
+                                    ${isOwner ? `
+                                    <button class="cancel-button" data-review-id="${review._id}" data-email="${review.email}">
                                         <i class="fas fa-times"></i>
-                                    </button>
+                                    </button>` : ''}
                                 </div>
                             </div>
                         </div>
                     `;
                     reviewsContainer.appendChild(card);
                 });
-            }
-
-            // --- Helper & Save Functions ---
-            function saveReviews() {
-                localStorage.setItem('userReviews', JSON.stringify(reviews));
-            }
-            function saveLikedReviews() {
-                localStorage.setItem('likedReviews', JSON.stringify(likedReviews));
             }
 
             function resizeAndConvertToBase64(file, maxWidth, quality) {
@@ -506,8 +548,9 @@
                 });
             }
 
-            // Initial Render
-            renderReviews();
+            // Initial Fetch
+            fetchReviews();
+            window.addEventListener('auth-ready', fetchReviews);
         });
     </script>
 </body>

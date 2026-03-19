@@ -18,11 +18,8 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
-
-    <!-- Clerk Auth -->
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"
-        data-clerk-publishable-key="pk_test_ZXZvbHZlZC1ib2EtMS5jbGVyay5hY2NvdW50cy5dZXYk" crossorigin="anonymous">
-        </script>
+    <!-- Common UI Script -->
+    <script src="js/ui.js" defer></script>
 </head>
 
 <body>
@@ -35,7 +32,8 @@
             </a>
 
             <!-- Mobile Toggler -->
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#ultimateNav" aria-controls="ultimateNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#ultimateNav">
                 <i class="fas fa-bars text-gold fs-2"></i>
             </button>
 
@@ -44,9 +42,6 @@
                 <div class="nav-menu-group mx-auto">
                     <a class="nav-link home-btn" href="index.html">
                         <i class="fas fa-home"></i> HOME
-                    </a>
-                    <a class="nav-link active" href="sweet-service.html">
-                        <i class="fas fa-ice-cream"></i> SWEET STALL
                     </a>
                     <a class="nav-link" href="contact.html">
                         <i class="fas fa-phone-alt"></i> CONTACT
@@ -57,6 +52,12 @@
                     <a class="nav-link" href="reviews.html">
                         <i class="fas fa-star"></i> REVIEWS
                     </a>
+                    <a class="nav-link" href="offers.html">
+                        <i class="fas fa-tags"></i> OFFERS
+                    </a>
+                    <a class="nav-link" href="#" onclick="showCardPopup(); return false;">
+                        <i class="fas fa-id-card"></i> VISITING CARD
+                    </a>
                     <a class="nav-link" href="user-dashboard.html">
                         <i class="fas fa-tachometer-alt"></i> DASHBOARD
                     </a>
@@ -64,7 +65,7 @@
 
                 <!-- Right Side -->
                 <div class="d-flex align-items-center justify-content-center gap-3 mt-3 mt-lg-0">
-                    <div id="user-button"></div>
+                    <div id="user-button" style="color: white;"></div>
                     <a href="join.html" class="join-us-btn">
                         JOIN US
                     </a>
@@ -101,7 +102,7 @@
                         <p class="text-white-50 mb-3">A classic assortment of our finest motichoor ladoos and crispy,
                             syrupy jalebis.</p>
                         <h4 class="text-white mb-4">₹150.00 / KG</h4>
-                        <button class="btn-secondary-glow align-self-start"
+                        <button class="btn-gold-glow align-self-start"
                             onclick="event.stopPropagation(); openBookingModal('Ladoo & Jalebi Box', '₹150.00 / KG')">
                             Order Now
                         </button>
@@ -121,7 +122,7 @@
                         <p class="text-white-50 mb-3">Make your day sweet with our premium ice creams. Taste that melts
                             your heart!</p>
                         <h4 class="text-white mb-4">₹200.00 / KG</h4>
-                        <button class="btn-secondary-glow align-self-start"
+                        <button class="btn-gold-glow align-self-start"
                             onclick="event.stopPropagation(); openBookingModal('Ice-Cream Stall', '₹200.00 / KG')">
                             Order Now
                         </button>
@@ -140,7 +141,7 @@
                         <h2 class="text-gold fw-bold mb-3">Beeda Stall</h2>
                         <p class="text-white-50 mb-3">Finish your meal the royal way! Sweet Beeda, happy ending.</p>
                         <h4 class="text-white mb-4">₹300.00 / Box</h4>
-                        <button class="btn-secondary-glow align-self-start"
+                        <button class="btn-gold-glow align-self-start"
                             onclick="event.stopPropagation(); openBookingModal('Beeda Stall', '₹300.00 / Box')">
                             Order Now
                         </button>
@@ -159,7 +160,7 @@
                         <h2 class="text-gold fw-bold mb-3">Pani Puri Stall</h2>
                         <p class="text-white-50 mb-3">Taste that pops! Spicy enough to make you fall in love.</p>
                         <h4 class="text-white mb-4">₹200.00 / Packet</h4>
-                        <button class="btn-secondary-glow align-self-start"
+                        <button class="btn-gold-glow align-self-start"
                             onclick="event.stopPropagation(); openBookingModal('Pani Puri Stall', '₹200.00 / Packet')">
                             Order Now
                         </button>
@@ -338,9 +339,9 @@
                                             <h2 class="text-gold fw-bold mb-3">${pkg.name || 'Item ' + (i + 1)}</h2>
                                             <p class="text-white-50 mb-3">${pkg.description || ''}</p>
                                             ${price ? `<h4 class="text-white mb-4">${price}</h4>` : ''}
-                                            <button class="btn-secondary-glow align-self-start"
-                                                onclick="event.stopPropagation(); openBookingModal('${pkg.name}', '${price}')">
-                                                Order Now
+                                            <button class="btn-gold-glow align-self-start"
+                                                onclick="event.stopPropagation(); openDbPkgModal(${i})">
+                                                <i class="bi bi-info-circle me-2"></i>See Details
                                             </button>
                                         </div>
                                     </div>
@@ -404,15 +405,17 @@
             document.getElementById('displayItem').innerText = name;
             document.getElementById('displayPrice').innerText = price;
 
-            if (window.Clerk && Clerk.user) {
-                document.getElementById('name').value = Clerk.user.fullName || '';
-                document.getElementById('email').value = Clerk.user.primaryEmailAddress.emailAddress || '';
-                fetch(`/api/user/${Clerk.user.id}`)
+            if (window.__authUser) {
+                const user = window.__authUser;
+                document.getElementById('name').value = user.name || user.email.split('@')[0];
+                document.getElementById('email').value = user.email || '';
+                fetch(`/api/user-by-email/${user.email}`)
                     .then(res => res.json())
-                    .then(user => {
-                        if (user && user.clerkId) {
-                            if (user.phone) document.getElementById('phone').value = user.phone;
-                            if (user.location) document.getElementById('address').value = user.location;
+                    .then(profile => {
+                        if (profile && profile.email) {
+                            if (profile.phone) document.getElementById('phone').value = profile.phone;
+                            if (profile.location) document.getElementById('address').value = profile.location;
+                            if (profile.age) document.getElementById('age').value = profile.age;
                         }
                     }).catch(e => console.log(e));
             }
@@ -422,8 +425,9 @@
 
         async function handleBooking(e) {
             e.preventDefault();
+            const user = window.__authUser;
             const bookingData = {
-                clerkId: window.Clerk?.user?.id,
+                email: user?.email,
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
                 email: document.getElementById('email').value,
@@ -460,31 +464,9 @@
             }
         }
 
-        // Clerk Init
-        window.addEventListener('load', async function () {
-            await loadDynamicContent();
-
-            if (window.Clerk) {
-                await window.Clerk.load({
-                    appearance: {
-                        baseTheme: 'dark',
-                        variables: {
-                            colorPrimary: '#fcdc3b',
-                            colorBackground: '#0f0f0f',
-                            colorText: 'white',
-                            borderRadius: '12px',
-                            fontFamily: "'Outfit', sans-serif"
-                        }
-                    }
-                });
-
-                if (Clerk.user) {
-                    Clerk.mountUserButton(document.getElementById('user-button'));
-                } else {
-                    const userButton = document.getElementById('user-button');
-                    userButton.innerHTML = '<button class="btn-primary-glow" onclick="Clerk.openSignIn()">Sign In</button>';
-                }
-            }
+        // Auth Init
+        window.addEventListener('auth-ready', () => {
+            console.log('Auth ready.');
         });
 
         // --- Live Verified Partners (Auto-Loaded from MongoDB) ---
@@ -509,24 +491,24 @@
                         ].filter(Boolean).join('');
 
                         return `
-                        <!-- Live Partner Injection -->
-                        <div class="col-lg-10 mt-5 pt-3 border-top border-white border-opacity-10 live-partner-anim">
-                            <div class="glass-panel p-0 d-flex flex-column flex-md-row overflow-hidden hover-lift"
-                                onclick="event.stopPropagation(); window.location.href='tel:${p.mobile}'">
-                                <div class="col-md-5" style="min-height:250px;">
-                                    <img src="${img}" alt="${p.name}" class="w-100 h-100" style="object-fit:cover;">
-                                </div>
-                                <div class="col-md-7 p-4 p-md-5 d-flex flex-column justify-content-center">
-                                    <span class="badge bg-gold text-dark mb-2 align-self-start"><i class="fas fa-check-circle me-1"></i> Verified Partner</span>
-                                    <h2 class="text-gold fw-bold mb-3">${p.name}</h2>
-                                    ${details}
-                                    <p class="text-success fw-bold mt-2" style="font-size:1.1rem;"><i class="fas fa-phone-alt me-1"></i> ${p.mobile}</p>
-                                    <button class="btn-secondary-glow align-self-start mt-2">
-                                        <i class="fas fa-phone me-1"></i> Call Contact
-                                    </button>
-                                </div>
-                            </div>
-                        </div>`;
+                <!-- Live Partner Injection -->
+                <div class="col-lg-10 mt-5 pt-3 border-top border-white border-opacity-10 live-partner-anim">
+                    <div class="glass-panel p-0 d-flex flex-column flex-md-row overflow-hidden hover-lift"
+                        onclick="event.stopPropagation(); window.location.href='tel:${p.mobile}'">
+                        <div class="col-md-5" style="min-height:250px;">
+                            <img src="${img}" alt="${p.name}" class="w-100 h-100" style="object-fit:cover;">
+                        </div>
+                        <div class="col-md-7 p-4 p-md-5 d-flex flex-column justify-content-center">
+                            <span class="badge bg-gold text-dark mb-2 align-self-start"><i class="fas fa-check-circle me-1"></i> Verified Partner</span>
+                            <h2 class="text-gold fw-bold mb-3">${p.name}</h2>
+                            ${details}
+                            <p class="text-success fw-bold mt-2" style="font-size:1.1rem;"><i class="fas fa-phone-alt me-1"></i> ${p.mobile}</p>
+                            <button class="btn-secondary-glow align-self-start mt-2">
+                                <i class="fas fa-phone me-1"></i> Call Contact
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
                     }).join('');
 
                     row.insertAdjacentHTML('beforeend', pHTML);
@@ -537,6 +519,61 @@
         window.addEventListener('load', () => setTimeout(loadLivePartners, 1200));
 
     </script>
-</body>
 
+    <!-- Login Popup (Premium Design) -->
+    <div id="loginPopup">
+        <div class="popup-content glass-login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+            <span class="close-btn" aria-label="Close login popup" role="button" tabindex="0" onclick="hideLoginPopup()">
+                <i class="fas fa-times"></i>
+            </span>
+            <div class="login-header mb-4">
+                <div class="login-icon-circle">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h2 id="loginTitle" class="text-gold mt-3">Admin Portal</h2>
+                <p class="text-white-50 small">Secure Access Only</p>
+            </div>
+            <form id="loginForm" onsubmit="return validateLogin(event)">
+                <div class="input-group-custom mb-4">
+                    <span class="input-icon"><i class="fas fa-user-astronaut"></i></span>
+                    <input type="text" class="form-control-glass" id="userId" name="userId" placeholder="Admin ID" required autocomplete="off" />
+                </div>
+                <div class="input-group-custom mb-4">
+                    <span class="input-icon"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control-glass" id="password" name="password" placeholder="Password" required autocomplete="off" />
+                </div>
+                <button type="submit" class="btn-login-glow w-100">
+                    <span class="btn-text">Unlock Dashboard</span>
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+                <div class="error-msg mt-3 text-center small" id="loginError"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Card Popup -->
+    <div id="cardPopup">
+        <div class="popup-content" role="dialog" aria-modal="true" aria-labelledby="cardTitle">
+            <span class="close-btn" aria-label="Close visiting card popup" role="button" tabindex="0" onclick="hideCardPopup()">&times;</span>
+            <h2 id="cardTitle">Visiting Card</h2>
+            <div class="card-images row g-3 mb-4">
+                <div class="col-6">
+                    <img src="1.png" alt="Front of the visiting card" onclick="openImageViewer(this.src)">
+                </div>
+                <div class="col-6">
+                    <img src="2.png" alt="Back of the visiting card" onclick="openImageViewer(this.src)">
+                </div>
+            </div>
+            <a href="visiting-card.zip" download class="btn-download">Download</a>
+        </div>
+    </div>
+
+    <!-- Image Viewer -->
+    <div id="imageViewer">
+        <span class="close-viewer-btn" onclick="closeImageViewer()">&times;</span>
+        <img id="fullScreenImage" src="" alt="Full-screen view">
+    </div>
+
+    <script src="js/premium-notify.js"></script><script src="js/auth.js"></script>
+</body>
 </html>

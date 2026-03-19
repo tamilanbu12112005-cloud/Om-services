@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | OM Service</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        :root {
+            --primary-gold: #fcdc3b;
+            --primary-dark: #19021C;
+            --secondary-dark: #250329;
+            --accent-purple: #8b5cf6;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background: var(--primary-dark);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .signin-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* Left Side: Brand & Visuals */
+        .brand-side {
+            flex: 1.2;
+            position: relative;
+            /* Using a cleaner gradient background without the repeated logo for better focus */
+            background: linear-gradient(135deg, #19021C 0%, #2b0c38 50%, #19021C 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .brand-side::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, var(--primary-dark) 100%);
+            opacity: 0.6;
+        }
+
+        .brand-logo {
+            width: 350px; /* Scaled down for better balance */
+            max-width: 90%;
+            margin-bottom: 2.5rem;
+            filter: drop-shadow(0 15px 50px rgba(252, 220, 59, 0.35));
+            animation: float 6s ease-in-out infinite;
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+
+        .brand-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 4rem;
+            color: white;
+            letter-spacing: 12px;
+            margin-bottom: 0rem;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+
+        .brand-subtitle {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--primary-gold);
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            z-index: 2;
+            opacity: 0.9;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Right Side: Form */
+        .form-side {
+            flex: 0.8;
+            background: var(--secondary-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Vertical Center */
+            align-items: center;    /* Horizontal Center */
+            padding: 2rem;
+            position: relative;
+            box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        .form-content {
+            max-width: 450px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .form-header {
+            margin-bottom: 3rem;
+        }
+
+        .form-header h2 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .auth-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .input-group-custom {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group-custom i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-gold);
+            opacity: 0.7;
+            font-size: 1.1rem;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 15px 12px 45px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-control-custom:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary-gold);
+            outline: none;
+            box-shadow: 0 0 15px rgba(252, 220, 59, 0.15);
+        }
+
+        .form-label-custom {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-gold);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-gold);
+            border: none;
+            border-radius: 12px;
+            color: black;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s;
+            margin-top: 1rem;
+            box-shadow: 0 10px 20px rgba(252, 220, 59, 0.2);
+        }
+
+        .btn-auth:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(252, 220, 59, 0.4);
+        }
+
+        .auth-footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .auth-footer a {
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .auth-footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .brand-side {
+                display: none;
+            }
+            .form-side {
+                flex: 1;
+                padding: 2rem;
+            }
+        }
+
+        .back-home {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-home:hover {
+            color: white;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #ff8585;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="back-home">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <div class="signin-container">
+        <!-- Brand Side -->
+        <div class="brand-side">
+            <img src="logo-removebg-preview.png" alt="OM Service Logo" class="brand-logo">
+            <h1 class="brand-title">OM</h1>
+            <div class="brand-subtitle">SERVICE</div>
+            <p class="text-white-50 mt-4 max-width-500">Excellence in every event. Premium Catering, Luxury Travels, and Cinematic Memories.</p>
+        </div>
+
+        <!-- Form Side -->
+        <div class="form-side" id="auth-box">
+            <div class="form-content">
+                <div class="form-header" id="form-header">
+                    <h2>Welcome Back</h2>
+                    <p>Enter your details to access your dashboard</p>
+                </div>
+
+                <div id="error-box" class="error-message"></div>
+
+                <div class="auth-card">
+                    <!-- Login Form (Default) -->
+                    <div id="login-form-area">
+                        <form onsubmit="handleSignin(event)">
+                            <div class="input-group-custom">
+                                <label class="form-label-custom">Email Address</label>
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="signin-email" class="form-control-custom" placeholder="name@example.com" required>
+                            </div>
+                            <div class="input-group-custom">
+                                <label class="form-label-custom">Password</label>
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signin-password" class="form-control-custom" placeholder="••••••••" required>
+                                <div class="text-end mt-2">
+                                    <a href="#" class="small text-gold text-decoration-none" onclick="showForgot()">Forgot Password?</a>
+                                </div>
+                            </div>
+                            <button type="submit" id="signin-btn" class="btn-auth">Sign In</button>
+                        </form>
+                    </div>
+
+                    <!-- Forgot Password Form -->
+                    <div id="forgot-form-area" style="display: none;">
+                        <form onsubmit="handleForgot(event)">
+                            <div class="input-group-custom">
+                                <label class="form-label-custom">Email Address</label>
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="forgot-email" class="form-control-custom" placeholder="name@example.com" required>
+                            </div>
+                            <button type="submit" id="forgot-btn" class="btn-auth">Send Reset OTP</button>
+                            <div class="text-center mt-3">
+                                <a href="#" class="small text-gold text-decoration-none" onclick="toggleAuthMode()">Back to Sign In</a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- SignUp Form (Hidden initially) -->
+                    <div id="signup-form-area" style="display: none;">
+                        <form onsubmit="handleSignup(event)">
+                            <div class="input-group-custom">
+                                <label class="form-label-custom">Full Name</label>
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="signup-name" class="form-control-custom" placeholder="John Doe" required>
+                            </div>
+                            <div class="input-group-custom">
+                                <label class="form-label-custom">Email Address</label>
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="signup-email" class="form-control-custom" placeholder="name@example.com" required>
+                            </div>
+                            <div class="input-group-custom">
+                                <label class="form-label-custom">Phone Number</label>
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" id="signup-phone" class="form-control-custom" placeholder="+91 00000 00000" required>
+                            </div>
+                            <div class="input-group-custom">
+                                <label class="form-label-custom">Password</label>
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signup-password" class="form-control-custom" placeholder="Create Password" required>
+                            </div>
+                            <button type="submit" id="signup-btn" class="btn-auth">Create Account</button>
+                        </form>
+                    </div>
+
+                    <!-- OTP Form -->
+                    <div id="otp-form-area" style="display: none;">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-shield-alt text-gold display-4"></i>
+                        </div>
+                        <p class="text-center text-white-50 small mb-4">We sent a verification code to <span id="sent-email-display" class="text-gold"></span></p>
+                        <form onsubmit="handleVerifyOtp(event)">
+                            <div class="input-group-custom">
+                                <label class="form-label-custom">Enter 6-digit OTP</label>
+                                <input type="text" id="otp-input" class="form-control-custom text-center fs-4 tracking-widest" maxlength="6" required>
+                            </div>
+                            <button type="submit" id="otp-btn" class="btn-auth">Verify OTP</button>
+                            <div class="text-center mt-3">
+                                <a href="#" class="small text-gold text-decoration-none" onclick="toggleAuthMode()">Back to Sign In</a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- New Password Form -->
+                    <div id="new-password-form-area" style="display: none;">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-key text-gold display-4"></i>
+                        </div>
+                        <form onsubmit="handleResetPassword(event)">
+                            <div class="input-group-custom">
+                                <label class="form-label-custom">New Password</label>
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="new-password-input" class="form-control-custom" placeholder="New Password" required>
+                            </div>
+                            <div class="input-group-custom">
+                                <label class="form-label-custom">Confirm Password</label>
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="confirm-password-input" class="form-control-custom" placeholder="Confirm Password" required>
+                            </div>
+                            <button type="submit" id="reset-btn" class="btn-auth">Update Password</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="auth-footer">
+                    <div id="footer-text">
+                        Don't have an account? <a href="#" onclick="toggleAuthMode()">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/premium-notify.js"></script><script src="js/auth.js"></script>
+
+    <script>
+        let mode = 'signin';
+        let signupData = {};
+
+        function toggleAuthMode() {
+            const loginArea = document.getElementById('login-form-area');
+            const signupArea = document.getElementById('signup-form-area');
+            const forgotArea = document.getElementById('forgot-form-area');
+            const otpArea = document.getElementById('otp-form-area');
+            const newPasswordArea = document.getElementById('new-password-form-area');
+            const headerH2 = document.querySelector('#form-header h2');
+            const headerP = document.querySelector('#form-header p');
+            const footerText = document.getElementById('footer-text');
+            const errorBox = document.getElementById('error-box');
+
+            errorBox.style.display = 'none';
+            otpArea.style.display = 'none';
+            forgotArea.style.display = 'none';
+            newPasswordArea.style.display = 'none';
+
+            if (mode === 'signup' || mode === 'forgot' || mode === 'new-password') {
+                mode = 'signin';
+                loginArea.style.display = 'block';
+                signupArea.style.display = 'none';
+                headerH2.innerText = 'Welcome Back';
+                headerP.innerText = 'Enter your details to access your dashboard';
+                footerText.innerHTML = "Don't have an account? <a href='#' onclick='toggleAuthMode()'>Sign Up</a>";
+            } else {
+                mode = 'signup';
+                loginArea.style.display = 'none';
+                signupArea.style.display = 'block';
+                headerH2.innerText = 'Create Account';
+                headerP.innerText = 'Join our premium service network';
+                footerText.innerHTML = "Already have an account? <a href='#' onclick='toggleAuthMode()'>Sign In</a>";
+            }
+        }
+
+        function showForgot() {
+            mode = 'forgot';
+            document.getElementById('login-form-area').style.display = 'none';
+            document.getElementById('signup-form-area').style.display = 'none';
+            document.getElementById('forgot-form-area').style.display = 'block';
+            document.getElementById('otp-form-area').style.display = 'none';
+            
+            document.querySelector('#form-header h2').innerText = 'Reset Password';
+            document.querySelector('#form-header p').innerText = 'Enter your email to receive an OTP';
+            document.getElementById('footer-text').innerHTML = "Remember your password? <a href='#' onclick='toggleAuthMode()'>Sign In</a>";
+        }
+
+        function showOTP(email) {
+            document.getElementById('login-form-area').style.display = 'none';
+            document.getElementById('signup-form-area').style.display = 'none';
+            document.getElementById('forgot-form-area').style.display = 'none';
+            document.getElementById('new-password-form-area').style.display = 'none';
+            document.getElementById('otp-form-area').style.display = 'block';
+            document.getElementById('sent-email-display').innerText = email;
+            
+            document.querySelector('#form-header h2').innerText = 'Verify Identity';
+            document.querySelector('#form-header p').innerText = 'Check your email for the OTP';
+        }
+
+        function showNewPassword() {
+            mode = 'new-password';
+            document.getElementById('login-form-area').style.display = 'none';
+            document.getElementById('signup-form-area').style.display = 'none';
+            document.getElementById('forgot-form-area').style.display = 'none';
+            document.getElementById('otp-form-area').style.display = 'none';
+            document.getElementById('new-password-form-area').style.display = 'block';
+            
+            document.querySelector('#form-header h2').innerText = 'Set Password';
+            document.querySelector('#form-header p').innerText = 'Choose a strong new password';
+        }
+
+        function showError(msg) {
+            const box = document.getElementById('error-box');
+            box.innerText = msg;
+            box.style.display = 'block';
+            
+            // Add shake effect
+            const card = document.querySelector('.auth-card');
+            card.animate([
+                { transform: 'translateX(0)' },
+                { transform: 'translateX(-10px)' },
+                { transform: 'translateX(10px)' },
+                { transform: 'translateX(0)' }
+            ], { duration: 300 });
+        }
+
+        async function handleSignin(e) {
+            e.preventDefault();
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+            const btn = document.getElementById('signin-btn');
+            
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Signing In...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    localStorage.setItem("serviceUser", JSON.stringify(data.user));
+                    window.location.href = "user-dashboard.html";
+                } else {
+                    showError(data.error || "Login failed. Check your credentials.");
+                    btn.innerHTML = 'Sign In';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                showError("Connection error. Please try again.");
+                btn.innerHTML = 'Sign In';
+                btn.disabled = false;
+            }
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            signupData = {
+                name: document.getElementById('signup-name').value,
+                email: document.getElementById('signup-email').value,
+                phone: document.getElementById('signup-phone').value,
+                password: document.getElementById('signup-password').value,
+                address: 'Not Specified' // Default
+            };
+
+            const btn = document.getElementById('signup-btn');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sending OTP...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch("/api/auth/send-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(signupData)
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    showOTP(signupData.email);
+                } else {
+                    showError(data.error || "Signup failed.");
+                    btn.innerHTML = 'Create Account';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                showError("Connection error. Please try again.");
+                btn.innerHTML = 'Create Account';
+                btn.disabled = false;
+            }
+        }
+
+        async function handleVerifyOtp(e) {
+            e.preventDefault();
+            const otp = document.getElementById('otp-input').value;
+            const btn = document.getElementById('otp-btn');
+            
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Verifying...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch("/api/auth/verify-otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: signupData.email, otp })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    if (mode === 'forgot') {
+                        signupData.otp = otp; // Store for next step
+                        showNewPassword();
+                    } else {
+                        localStorage.setItem("serviceUser", JSON.stringify(data.user));
+                        window.location.href = "user-dashboard.html";
+                    }
+                } else {
+                    showError(data.error || "Invalid OTP. Please try again.");
+                    btn.innerHTML = 'Verify OTP';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                showError("Connection error. Please try again.");
+                btn.innerHTML = 'Verify OTP';
+                btn.disabled = false;
+            }
+        }
+
+        async function handleResetPassword(e) {
+            e.preventDefault();
+            const newPassword = document.getElementById('new-password-input').value;
+            const confirmPassword = document.getElementById('confirm-password-input').value;
+            const btn = document.getElementById('reset-btn');
+
+            if (newPassword !== confirmPassword) return showError("Passwords do not match.");
+
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Updating...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch("/api/auth/reset-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        email: signupData.email,
+                        otp: signupData.otp,
+                        newPassword: newPassword
+                    })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    alert("Password updated successfully! Redirecting to sign in...");
+                    window.location.reload();
+                } else {
+                    showError(data.error || "Failed to update password.");
+                    btn.innerHTML = 'Update Password';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                showError("Connection error. Please try again.");
+                btn.innerHTML = 'Update Password';
+                btn.disabled = false;
+            }
+        }
+
+        async function handleForgot(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgot-email').value;
+            const btn = document.getElementById('forgot-btn');
+            
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sending...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch("/api/auth/forgot-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    signupData.email = email; // Reuse signupData object for email storage
+                    showOTP(email);
+                } else {
+                    showError(data.error || "Failed to send reset OTP.");
+                    btn.innerHTML = 'Send Reset OTP';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                showError("Connection error. Please try again.");
+                btn.innerHTML = 'Send Reset OTP';
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+
+</html>
+

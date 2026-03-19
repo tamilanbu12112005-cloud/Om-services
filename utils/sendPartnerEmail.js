@@ -17,7 +17,7 @@ const sendPartnerEmail = async (toEmail, partnerDetails) => {
     const mailOptions = {
         from: `"Om Services" <${process.env.EMAIL_USER}>`,
         to: toEmail,
-      subject: `Welcome to the Squad! - ${partnerDetails.category} Partner`,
+      subject: `Welcome to OM Service!`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -42,18 +42,17 @@ const sendPartnerEmail = async (toEmail, partnerDetails) => {
                     <h1 class="logo-text">OM SERVICE</h1>
                     <p class="subtitle">Join Our Network</p>
                 </div>
-                <div class="content">
-                    <div class="welcome-text">You Join Our Squad! 🚀</div>
+                 <div class="content">
+                    <div class="welcome-text" style="color:#000; font-weight: 800; font-size: 28px;">YOU ARE JOIN NOW!</div>
                     <div class="message-body">
-                        <p>Welcome <strong>${partnerDetails.name}</strong>,</p>
-                        <p>Thank you for your interest in partnering with us for <strong>${partnerDetails.category}</strong>.</p>
-                        <p>Our team will contact you soon to verify your details and onboard you.</p>
+                        <p style="font-size: 18px; color: #1a1a1a;">WELCOME, <strong>${partnerDetails.name}</strong>!</p>
+                        <p>Thank you for joining our network for <strong>${partnerDetails.category}</strong>. We are excited to work with you.</p>
                     </div>
 
-                    <div class="contact-box">
-                        <p style="margin: 0 0 6px; color: #555; font-weight: 600;">Any doubts? Contact us:</p>
-                        <a href="mailto:omservice.live@gmail.com" class="contact-number" style="font-size:16px;">✉️ omservice.live@gmail.com</a>
-                        <a href="tel:8870043071" class="contact-number" style="font-size:22px; margin-top:5px;">📱 8870043071</a>
+                    <div class="contact-box" style="margin-top: 40px; padding: 25px;">
+                        <p style="margin: 0 0 10px; color: #555; font-size: 14px; font-weight: 800;">ANY DOUBT? ASK THIS EMAIL:</p>
+                        <a href="mailto:omservice.live@gmail.com" class="contact-number" style="font-size: 18px; color: #37023e; font-weight: 900;">✉️ omservice.live@gmail.com</a>
+                        <p style="margin-top: 15px; font-size: 12px; color: #888;">OM SERVICE TEAM</p>
                     </div>
                 </div>
                 <div class="footer">

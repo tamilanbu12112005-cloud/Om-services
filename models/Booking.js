@@ -1,18 +1,19 @@
 const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({
+    email: { type: String, required: true },
     serviceType: { type: String, required: true }, // e.g., 'Catering', 'Travels', 'Photography'
     serviceName: { type: String, required: true }, // e.g., 'Banana Leaf', '54 Seater Bus'
     name: { type: String, required: true },
     age: { type: Number },
     phone: { type: String, required: true },
-    email: { type: String },
     address: { type: String },
     date: { type: String, required: true },
-    guests: { type: Number }, // For catering
-    eventDuration: { type: String }, // For catering
-    mealType: { type: String }, // For catering
-    pickupLocation: { type: String }, // For travels
+    guests: Number, // For catering
+    eventDuration: String, // For catering
+    mealType: String, // For catering
+    cateringStyle: String, // For catering (Banana Leaf / Buffet)
+    pickupLocation: String, // For travels
     dropDestination: { type: String }, // For travels
     travelDuration: { type: String }, // For travels
     passengerCount: { type: Number }, // For travels
@@ -20,6 +21,7 @@ const bookingSchema = new mongoose.Schema({
     photographyDuration: { type: String }, // For photography
     sweetQuantity: { type: String }, // For sweets
     functionTime: { type: String }, // For sweets
+    departureSlot: { type: String }, // For travels (Morning/Afternoon/Evening/Night)
     
     // NEW: Status tracking
     status: { 

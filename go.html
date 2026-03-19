@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,10 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- Clerk Auth -->
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"
-        data-clerk-publishable-key="pk_test_ZXZvbHZlZC1ib2EtMS5jbGVyay5hY2NvdW50cy5kZXYk" crossorigin="anonymous">
-        </script>
+    <!-- Common UI Script -->
+    <script src="js/ui.js" defer></script>
 </head>
 
 <body>
@@ -29,24 +26,31 @@
             </a>
 
             <!-- Mobile Toggler -->
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#ultimateNav">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#ultimateNav">
                 <i class="fas fa-bars text-gold fs-2"></i>
             </button>
 
             <!-- Menu -->
             <div class="collapse navbar-collapse" id="ultimateNav">
                 <div class="nav-menu-group mx-auto">
-                    <a class="nav-link active home-btn" href="index.html">
+                    <a class="nav-link home-btn" href="index.html">
                         <i class="fas fa-home"></i> HOME
                     </a>
                     <a class="nav-link" href="contact.html">
                         <i class="fas fa-phone-alt"></i> CONTACT
                     </a>
+                    <a class="nav-link" href="about.html">
+                        <i class="fas fa-info-circle"></i> ABOUT US
+                    </a>
                     <a class="nav-link" href="reviews.html">
                         <i class="fas fa-star"></i> REVIEWS
                     </a>
-                    <a class="nav-link" href="about.html">
-                        <i class="fas fa-info-circle"></i> ABOUT US
+                    <a class="nav-link" href="offers.html">
+                        <i class="fas fa-tags"></i> OFFERS
+                    </a>
+                    <a class="nav-link" href="#" onclick="showCardPopup(); return false;">
+                        <i class="fas fa-id-card"></i> VISITING CARD
                     </a>
                     <a class="nav-link" href="user-dashboard.html">
                         <i class="fas fa-tachometer-alt"></i> DASHBOARD
@@ -55,7 +59,7 @@
 
                 <!-- Right Side -->
                 <div class="d-flex align-items-center justify-content-center gap-3 mt-3 mt-lg-0">
-                    <div id="user-button"></div>
+                    <div id="user-button" style="color: white;"></div>
                     <a href="join.html" class="join-us-btn">
                         JOIN US
                     </a>
@@ -115,56 +119,67 @@
         </div>
     </div>
 
+    <!-- Login Popup (Premium Design) -->
+    <div id="loginPopup">
+        <div class="popup-content glass-login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+            <span class="close-btn" aria-label="Close login popup" role="button" tabindex="0" onclick="hideLoginPopup()">
+                <i class="fas fa-times"></i>
+            </span>
+            <div class="login-header mb-4">
+                <div class="login-icon-circle">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h2 id="loginTitle" class="text-gold mt-3">Admin Portal</h2>
+                <p class="text-white-50 small">Secure Access Only</p>
+            </div>
+            <form id="loginForm" onsubmit="return validateLogin(event)">
+                <div class="input-group-custom mb-4">
+                    <span class="input-icon"><i class="fas fa-user-astronaut"></i></span>
+                    <input type="text" class="form-control-glass" id="userId" name="userId" placeholder="Admin ID" required autocomplete="off" />
+                </div>
+                <div class="input-group-custom mb-4">
+                    <span class="input-icon"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control-glass" id="password" name="password" placeholder="Password" required autocomplete="off" />
+                </div>
+                <button type="submit" class="btn-login-glow w-100">
+                    <span class="btn-text">Unlock Dashboard</span>
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+                <div class="error-msg mt-3 text-center small" id="loginError"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Card Popup -->
+    <div id="cardPopup">
+        <div class="popup-content" role="dialog" aria-modal="true" aria-labelledby="cardTitle">
+            <span class="close-btn" aria-label="Close visiting card popup" role="button" tabindex="0" onclick="hideCardPopup()">&times;</span>
+            <h2 id="cardTitle">Visiting Card</h2>
+            <div class="card-images row g-3 mb-4">
+                <div class="col-6">
+                    <img src="1.png" alt="Front of the visiting card" onclick="openImageViewer(this.src)">
+                </div>
+                <div class="col-6">
+                    <img src="2.png" alt="Back of the visiting card" onclick="openImageViewer(this.src)">
+                </div>
+            </div>
+            <a href="visiting-card.zip" download class="btn-download">Download</a>
+        </div>
+    </div>
+
+    <!-- Image Viewer -->
+    <div id="imageViewer">
+        <span class="close-viewer-btn" onclick="closeImageViewer()">&times;</span>
+        <img id="fullScreenImage" src="" alt="Full-screen view">
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function navigateTo(page) {
             window.location.href = page;
         }
-
-        // Clerk Initialization
-        window.addEventListener('load', async function () {
-            if (window.Clerk) {
-                try {
-                    await window.Clerk.load({
-                        appearance: {
-                            baseTheme: 'dark',
-                            variables: {
-                                colorPrimary: '#fcdc3b',
-                                colorBackground: '#19021C',
-                                colorText: 'white',
-                                borderRadius: '12px',
-                                fontFamily: "'Arial Black', sans-serif"
-                            }
-                        }
-                    });
-
-                    if (Clerk.user) {
-                        Clerk.mountUserButton(document.getElementById('user-button'));
-                        // Show Dashboard link only if logged in (optional logic, CSS handles display)
-                        document.getElementById('nav-dashboard').style.display = 'block';
-                    } else {
-                        const userButton = document.getElementById('user-button');
-                        userButton.innerHTML = `
-                            <button onclick="Clerk.openSignIn()" class="btn" style="
-                                padding: 6px 20px;
-                                background-color: transparent;
-                                color: #fcdc3b;
-                                border: 2px solid #fcdc3b;
-                                border-radius: 30px;
-                                font-size: 1rem;
-                                font-weight: bold;
-                                letter-spacing: 1px;
-                                cursor: pointer;
-                                transition: all 0.3s;
-                            ">Sign In</button>
-                        `;
-                    }
-                } catch (err) {
-                    console.error("Clerk load error:", err);
-                }
-            }
-        });
     </script>
+    <script src="js/premium-notify.js"></script><script src="js/auth.js"></script>
 </body>
-
+</html>

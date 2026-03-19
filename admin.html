@@ -2227,15 +2227,20 @@
                         <p class="text-white-50 small mt-1 mb-0">Review, approve or reject vendor/partner applications.
                         </p>
                     </div>
-                    <div class="d-flex gap-2 align-items-center">
-                        <select id="jointsFilter" onchange="loadPartners()" class="form-select form-select-sm"
-                            style="background:#2b0530; border:1px solid rgba(252,220,59,0.2); color:#fff; width:auto;">
-                            <option value="">All Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Approved">Approved</option>
-                            <option value="Rejected">Rejected</option>
-                        </select>
-                        <button onclick="loadPartners()" class="btn-sm-action"><i
+                    <div class="d-flex gap-3 align-items-center">
+                        <div class="joint-tabs">
+                            <button class="joint-tab active" onclick="setJointFilter('Pending', this)">
+                                <i class="fas fa-clock"></i> Pending <span class="joint-tab-count" id="count-pending">0</span>
+                            </button>
+                            <button class="joint-tab" onclick="setJointFilter('Approved', this)">
+                                <i class="fas fa-check-circle"></i> Approved <span class="joint-tab-count" id="count-approved">0</span>
+                            </button>
+                            <button class="joint-tab" onclick="setJointFilter('Rejected', this)">
+                                <i class="fas fa-times-circle"></i> Rejected <span class="joint-tab-count" id="count-rejected">0</span>
+                            </button>
+                        </div>
+                        <input type="hidden" id="jointsFilter" value="Pending">
+                        <button onclick="loadPartners()" class="btn-sm-action" style="height: 42px; padding: 0 20px;"><i
                                 class="fas fa-sync-alt me-1"></i>Refresh</button>
                     </div>
                 </div>
@@ -2684,6 +2689,52 @@
             width: 90%;
             max-width: 440px;
         }
+        /* Joint Tabs */
+        .joint-tabs {
+            display: flex;
+            background: #2b0530;
+            padding: 5px;
+            border-radius: 12px;
+            border: 1px solid rgba(252, 220, 59, 0.1);
+            gap: 5px;
+        }
+
+        .joint-tab {
+            padding: 8px 24px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: rgba(255, 255, 255, 0.5);
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .joint-tab:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .joint-tab.active {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 4px 12px rgba(252, 220, 59, 0.2);
+        }
+
+        .joint-tab-count {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+        }
+
+        .joint-tab.active .joint-tab-count {
+            background: rgba(0, 0, 0, 0.2);
+        }
     </style>
 
     <!-- Note/Action Overlay for approve/reject -->
@@ -2711,6 +2762,8 @@
 
 
     <!-- Toast Notification -->
+    <!-- Premium Notifier -->
+    <script src="js/premium-notify.js"></script>
     <div id="pe-toast" class="pe-toast"></div>
 
 
@@ -2852,6 +2905,13 @@
         let _jointActionId = null;
         let _jointActionType = null;
 
+        function setJointFilter(status, btn) {
+            document.querySelectorAll('.joint-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('jointsFilter').value = status;
+            loadPartners();
+        }
+
         async function loadPartners() {
             const container = document.getElementById('joints-container');
             if (!container) return;
@@ -2860,18 +2920,29 @@
 
             try {
                 const res = await fetch('/api/partners');
-                let partners = await res.json();
+                const allPartners = await res.json();
 
-                // Update pending badge
-                const pending = partners.filter(p => p.status === 'Pending').length;
+                // Update tab counts
+                const pendingArr = allPartners.filter(p => !p.status || p.status === 'Pending');
+                const approvedArr = allPartners.filter(p => p.status === 'Approved');
+                const rejectedArr = allPartners.filter(p => p.status === 'Rejected');
+
+                document.getElementById('count-pending').textContent = pendingArr.length;
+                document.getElementById('count-approved').textContent = approvedArr.length;
+                document.getElementById('count-rejected').textContent = rejectedArr.length;
+
+                // Update sidebar badge
                 const badge = document.getElementById('joints-badge');
                 if (badge) {
-                    badge.textContent = pending;
-                    badge.style.display = pending > 0 ? 'inline-block' : 'none';
+                    badge.textContent = pendingArr.length;
+                    badge.style.display = pendingArr.length > 0 ? 'inline-block' : 'none';
                 }
 
-                // Apply filter
-                if (filter) partners = partners.filter(p => p.status === filter);
+                // Apply current filter
+                let partners = filter === 'Pending' ? pendingArr 
+                             : filter === 'Approved' ? approvedArr 
+                             : filter === 'Rejected' ? rejectedArr 
+                             : allPartners;
 
                 if (partners.length === 0) {
                     container.innerHTML = `<div class="text-center text-white-50 py-5"><i class="fas fa-inbox fa-3x mb-3 d-block" style="opacity:0.3"></i>${filter ? 'No ' + filter + ' applications.' : 'No applications yet.'}</div>`;
@@ -2879,9 +2950,10 @@
                 }
 
                 container.innerHTML = partners.map(p => {
-                    const statusBadge = p.status === 'Approved'
+                    const status = p.status || 'Pending';
+                    const statusBadge = status === 'Approved'
                         ? `<span class="badge-approved">✅ Approved</span>`
-                        : p.status === 'Rejected'
+                        : status === 'Rejected'
                             ? `<span class="badge-rejected">❌ Rejected</span>`
                             : `<span class="badge-pending">⏳ Pending</span>`;
 
@@ -2899,9 +2971,9 @@
                         p.adminNote ? `<div class="joint-info-item" style="grid-column:1/-1;background:rgba(252,220,59,0.06);border:1px solid rgba(252,220,59,0.2)"><div class="joint-info-label">Admin Note</div><div class="joint-info-value">${p.adminNote}</div></div>` : ''
                     ].filter(Boolean).join('');
 
-                    const approveBtn = p.status !== 'Approved'
+                    const approveBtn = status !== 'Approved'
                         ? `<button class="btn-approve" onclick="jointAction('${p._id}','approve')"><i class="fas fa-check me-1"></i>Approve</button>` : '';
-                    const rejectBtn = p.status !== 'Rejected'
+                    const rejectBtn = status !== 'Rejected'
                         ? `<button class="btn-reject" onclick="jointAction('${p._id}','reject')"><i class="fas fa-times me-1"></i>Reject</button>` : '';
 
                     return `
@@ -2983,7 +3055,7 @@
         }
 
         async function deletePartner(id) {
-            if (!confirm('Delete this application permanently?')) return;
+            if (!(await confirmReplacement('Delete this application permanently?'))) return;
             try {
                 const res = await fetch(`/api/partners/${id}`, { method: 'DELETE' });
                 const result = await res.json();
@@ -3081,7 +3153,7 @@
         }
 
         async function deleteBooking(id) {
-            if (confirm('Are you sure you want to permanently delete this booking?')) {
+            if (await confirmReplacement('Are you sure you want to permanently delete this booking?')) {
                 await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
                 // Re-fetch to ensure sync with backend
                 loadData();
@@ -3640,7 +3712,7 @@
         }
 
         async function deletePePackage(id) {
-            if (!confirm('Delete this package permanently?')) return;
+            if (!(await confirmReplacement('Delete this package permanently?'))) return;
             try {
                 await fetch('/api/services/' + id, { method: 'DELETE' });
                 pePackages = pePackages.filter(p => p._id !== id);
@@ -3689,7 +3761,7 @@
         }
 
         async function removePeSlideImage(imageUrl) {
-            if (!peCurrentPage || !confirm('Remove this slide image?')) return;
+            if (!peCurrentPage || !(await confirmReplacement('Remove this slide image?'))) return;
             const cached = pePageDataCache[peCurrentPage] || {};
             let sections = JSON.parse(JSON.stringify(cached.sections || []));
             sections.forEach(s => { if (s.images) s.images = s.images.filter(img => img !== imageUrl); });
@@ -3806,7 +3878,7 @@
         }
 
         async function removePeGalleryImage(imageUrl) {
-            if (!peCurrentPage || !confirm('Remove this image?')) return;
+            if (!peCurrentPage || !(await confirmReplacement('Remove this image?'))) return;
             const cached = pePageDataCache[peCurrentPage] || {};
             let sections = JSON.parse(JSON.stringify(cached.sections || []));
             sections.forEach(s => { if (s.images) s.images = s.images.filter(img => img !== imageUrl); });

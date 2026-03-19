@@ -18,11 +18,8 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
-
-    <!-- Clerk Auth -->
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"
-        data-clerk-publishable-key="pk_test_ZXZvbHZlZC1ib2EtMS5jbGVyay5hY2NvdW50cy5kZXYk" crossorigin="anonymous">
-        </script>
+    <!-- Common UI Script -->
+    <script src="js/ui.js" defer></script>
 </head>
 
 <body>
@@ -36,7 +33,8 @@
             </a>
 
             <!-- Mobile Toggler -->
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#ultimateNav">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#ultimateNav">
                 <i class="fas fa-bars text-gold fs-2"></i>
             </button>
 
@@ -45,9 +43,6 @@
                 <div class="nav-menu-group mx-auto">
                     <a class="nav-link home-btn" href="index.html">
                         <i class="fas fa-home"></i> HOME
-                    </a>
-                    <a class="nav-link active" href="catering.html">
-                        <i class="fas fa-utensils"></i> CATERING
                     </a>
                     <a class="nav-link" href="contact.html">
                         <i class="fas fa-phone-alt"></i> CONTACT
@@ -58,6 +53,12 @@
                     <a class="nav-link" href="reviews.html">
                         <i class="fas fa-star"></i> REVIEWS
                     </a>
+                    <a class="nav-link" href="offers.html">
+                        <i class="fas fa-tags"></i> OFFERS
+                    </a>
+                    <a class="nav-link" href="#" onclick="showCardPopup(); return false;">
+                        <i class="fas fa-id-card"></i> VISITING CARD
+                    </a>
                     <a class="nav-link" href="user-dashboard.html">
                         <i class="fas fa-tachometer-alt"></i> DASHBOARD
                     </a>
@@ -65,7 +66,7 @@
 
                 <!-- Right Side -->
                 <div class="d-flex align-items-center justify-content-center gap-3 mt-3 mt-lg-0">
-                    <div id="user-button"></div>
+                    <div id="user-button" style="color: white;"></div>
                     <a href="join.html" class="join-us-btn">
                         JOIN US
                     </a>
@@ -104,7 +105,7 @@
                         <h2 class="text-gold fw-bold mb-3">Authentic Banana Leaf</h2>
                         <p class="text-white-50 mb-4">Experience the traditional taste served on pristine banana leaves
                             for your most cherished events.</p>
-                        <button class="btn-secondary-glow align-self-start"
+                        <button class="btn-gold-glow align-self-start"
                             onclick="event.stopPropagation(); openMenuModal('leaf')">
                             <i class="bi bi-book me-2"></i>View Menu
                         </button>
@@ -123,7 +124,7 @@
                         <h2 class="text-gold fw-bold mb-3">Exquisite Buffet Service</h2>
                         <p class="text-white-50 mb-4">A grand feast with a wide array of exquisite dishes, perfect for
                             all your special occasions.</p>
-                        <button class="btn-secondary-glow align-self-start"
+                        <button class="btn-gold-glow align-self-start"
                             onclick="event.stopPropagation(); openMenuModal('buffet')">
                             <i class="bi bi-book me-2"></i>View Menu
                         </button>
@@ -196,27 +197,39 @@
                         <div class="form-section-title">
                             <i class="fas fa-glass-cheers"></i> Event Details
                         </div>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-12">
+                                <label class="premium-label"><i class="fas fa-concierge-bell"></i> Catering Style</label>
+                                <select class="form-control-premium form-select" id="cateringStyle" required>
+                                    <option value="" disabled selected>Select Style</option>
+                                    <option value="Banana Leaf">Traditional Banana Leaf</option>
+                                    <option value="Buffet">Premium Buffet Service</option>
+                                    <option value="Both">Both Styles</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <label class="premium-label"><i class="fas fa-calendar-day"></i> Date</label>
+                                <label class="premium-label"><i class="fas fa-calendar-day"></i> Event Date</label>
                                 <input type="date" class="form-control-premium" id="date" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="premium-label"><i class="fas fa-users"></i> Guests</label>
-                                <input type="number" class="form-control-premium" id="guests"
+                                <label class="premium-label"><i class="fas fa-users"></i> No. of Guests</label>
+                                <input type="number" class="form-control-premium" id="guests" required
                                     placeholder="Approx number">
                             </div>
                             <div class="col-md-6">
                                 <label class="premium-label"><i class="fas fa-utensil-spoon"></i> Meal Type</label>
                                 <select class="form-control-premium form-select" id="mealType">
-                                    <option value="All Meals">All Meals</option>
-                                    <option value="Breakfast">Breakfast</option>
-                                    <option value="Lunch">Lunch</option>
-                                    <option value="Dinner">Dinner</option>
+                                    <option value="Full Day (All Meals)">Full Day (All Meals)</option>
+                                    <option value="Lunch Only">Lunch Only</option>
+                                    <option value="Dinner Only">Dinner Only</option>
+                                    <option value="Breakfast & Lunch">Breakfast & Lunch</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="premium-label"><i class="fas fa-stopwatch"></i> Duration</label>
+                                <label class="premium-label"><i class="fas fa-stopwatch"></i> Event Duration</label>
                                 <select class="form-control-premium form-select" id="eventDuration">
                                     <option value="1 Day">1 Day</option>
                                     <option value="2 Days">2 Days</option>
@@ -226,7 +239,7 @@
                         </div>
 
                         <button type="submit" class="btn-premium-action">
-                            Confirm Booking
+                            Confirm Catering Booking
                         </button>
                     </form>
                 </div>
@@ -326,7 +339,7 @@
                                             <h2 class="text-gold fw-bold mb-3">${pkg.name || 'Package ' + (i + 1)}</h2>
                                             <p class="text-white-50 mb-3">${pkg.description || ''}</p>
                                             ${pkg.price ? `<h4 class="text-white mb-4">${pkg.price}</h4>` : ''}
-                                            <button class="btn-secondary-glow align-self-start"
+                                            <button class="btn-gold-glow align-self-start"
                                                 onclick="event.stopPropagation(); openDbPkgModal(${i})">
                                                 <i class="bi bi-info-circle me-2"></i>See Details
                                             </button>
@@ -406,7 +419,7 @@
         let selectedServiceType = '';
         let isSubmitting = false;
 
-        function openBookingModal(serviceName) {
+        async function openBookingModal(serviceName) {
             // If opening from menu modal, close it first
             bootstrap.Modal.getInstance(document.getElementById('menuModal'))?.hide();
 
@@ -418,21 +431,28 @@
             if (banner) banner.innerText = selectedServiceType;
 
             // Auto-fill logic
-            if (window.Clerk && Clerk.user) {
-                // ... fetch profile logic similar to before ...
-                document.getElementById('name').value = Clerk.user.fullName || '';
-                document.getElementById('email').value = Clerk.user.primaryEmailAddress.emailAddress || '';
+            if (window.__authUser) {
+                const user = window.__authUser;
+                document.getElementById('name').value = user.name || user.email.split('@')[0];
+                document.getElementById('email').value = user.email || '';
                 // Try to fetch DB profile
-                fetch(`/api/user/${Clerk.user.id}`)
+                fetch(`/api/user-by-email/${user.email}`)
                     .then(res => res.json())
-                    .then(user => {
-                        if (user && user.clerkId) {
-                            if (user.phone) document.getElementById('phone').value = user.phone;
-                            if (user.location) document.getElementById('address').value = user.location;
-                            if (user.age) document.getElementById('age').value = user.age;
+                    .then(profile => {
+                        if (profile && profile.email) {
+                            if (profile.phone) document.getElementById('phone').value = profile.phone;
+                            if (profile.location) document.getElementById('address').value = profile.location;
+                            if (profile.age) document.getElementById('age').value = profile.age;
                         }
                     }).catch(e => console.log(e));
             }
+
+            // Set catering style based on selection
+            const styleSelector = document.getElementById('cateringStyle');
+            if (serviceName.includes('Banana Leaf')) styleSelector.value = 'Banana Leaf';
+            else if (serviceName.includes('Buffet')) styleSelector.value = 'Buffet';
+            else styleSelector.value = '';
+
             bookingModal.show();
         }
 
@@ -592,8 +612,9 @@
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
             btn.disabled = true;
 
+            const user = window.__authUser;
+
             const bookingData = {
-                clerkId: window.Clerk?.user?.id,
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
                 email: document.getElementById('email').value,
@@ -601,6 +622,7 @@
                 address: document.getElementById('address').value,
                 serviceType: 'Catering',
                 serviceName: selectedServiceType,
+                cateringStyle: document.getElementById('cateringStyle').value,
                 date: document.getElementById('date').value,
                 mealType: document.getElementById('mealType').value,
                 guests: document.getElementById('guests').value,
@@ -634,32 +656,14 @@
             }
         }
 
-        // Clerk Init
-        window.addEventListener('load', async function () {
-            // Load dynamic content first
+        // Note: Auth is handled by js/auth.js
+        window.addEventListener('auth-ready', async () => {
             await loadDynamicContent();
+        });
 
-            if (window.Clerk) {
-                await window.Clerk.load({
-                    appearance: {
-                        baseTheme: 'dark',
-                        variables: {
-                            colorPrimary: '#fcdc3b',
-                            colorBackground: '#0f0f0f',
-                            colorText: 'white',
-                            borderRadius: '12px',
-                            fontFamily: "'Outfit', sans-serif"
-                        }
-                    }
-                });
-
-                if (Clerk.user) {
-                    Clerk.mountUserButton(document.getElementById('user-button'));
-                } else {
-                    const userButton = document.getElementById('user-button');
-                    userButton.innerHTML = '<button class="btn-primary-glow" onclick="Clerk.openSignIn()">Sign In</button>';
-                }
-            }
+        // Ensure dynamic content loads even if Auth fails
+        window.addEventListener('load', () => {
+            if (!window.__authUser) loadDynamicContent();
         });
 
         // --- Live Verified Partners (Auto-Loaded from MongoDB) ---
@@ -709,8 +713,62 @@
         }
 
         window.addEventListener('load', () => setTimeout(loadLivePartners, 1200));
-
     </script>
-</body>
 
+    <!-- Login Popup (Premium Design) -->
+    <div id="loginPopup">
+        <div class="popup-content glass-login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+            <span class="close-btn" aria-label="Close login popup" role="button" tabindex="0" onclick="hideLoginPopup()">
+                <i class="fas fa-times"></i>
+            </span>
+            <div class="login-header mb-4">
+                <div class="login-icon-circle">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h2 id="loginTitle" class="text-gold mt-3">Admin Portal</h2>
+                <p class="text-white-50 small">Secure Access Only</p>
+            </div>
+            <form id="loginForm" onsubmit="return validateLogin(event)">
+                <div class="input-group-custom mb-4">
+                    <span class="input-icon"><i class="fas fa-user-astronaut"></i></span>
+                    <input type="text" class="form-control-glass" id="userId" name="userId" placeholder="Admin ID" required autocomplete="off" />
+                </div>
+                <div class="input-group-custom mb-4">
+                    <span class="input-icon"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control-glass" id="password" name="password" placeholder="Password" required autocomplete="off" />
+                </div>
+                <button type="submit" class="btn-login-glow w-100">
+                    <span class="btn-text">Unlock Dashboard</span>
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+                <div class="error-msg mt-3 text-center small" id="loginError"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Card Popup -->
+    <div id="cardPopup">
+        <div class="popup-content" role="dialog" aria-modal="true" aria-labelledby="cardTitle">
+            <span class="close-btn" aria-label="Close visiting card popup" role="button" tabindex="0" onclick="hideCardPopup()">&times;</span>
+            <h2 id="cardTitle">Visiting Card</h2>
+            <div class="card-images row g-3 mb-4">
+                <div class="col-6">
+                    <img src="1.png" alt="Front of the visiting card" onclick="openImageViewer(this.src)">
+                </div>
+                <div class="col-6">
+                    <img src="2.png" alt="Back of the visiting card" onclick="openImageViewer(this.src)">
+                </div>
+            </div>
+            <a href="visiting-card.zip" download class="btn-download">Download</a>
+        </div>
+    </div>
+
+    <!-- Image Viewer -->
+    <div id="imageViewer">
+        <span class="close-viewer-btn" onclick="closeImageViewer()">&times;</span>
+        <img id="fullScreenImage" src="" alt="Full-screen view">
+    </div>
+
+    <script src="js/premium-notify.js"></script><script src="js/auth.js"></script>
+</body>
 </html>

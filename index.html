@@ -10,10 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- Clerk Auth -->
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"
-        data-clerk-publishable-key="pk_test_bW92ZWQtcHJpbWF0ZS00LmNsZXJrLmFjY291bnRzLmRldiQ" crossorigin="anonymous">
-        </script>
+    <!-- Custom Auth -->
     <style>
         /* PREMIUM LOGIN MODAL STYLES */
         #loginPopup {
@@ -153,6 +150,10 @@
             color: #fcdc3b !important;
         }
     </style>
+    <!-- Premium Notifier -->
+    <script src="js/premium-notify.js"></script>
+    <!-- Common UI Script -->
+    <script src="js/ui.js" defer></script>
 </head>
 
 <body>
@@ -165,7 +166,8 @@
             </a>
 
             <!-- Mobile Toggler -->
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#ultimateNav">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#ultimateNav">
                 <i class="fas fa-bars text-gold fs-2"></i>
             </button>
 
@@ -183,6 +185,9 @@
                     </a>
                     <a class="nav-link" href="reviews.html">
                         <i class="fas fa-star"></i> REVIEWS
+                    </a>
+                    <a class="nav-link" href="offers.html">
+                        <i class="fas fa-tags"></i> OFFERS
                     </a>
                     <a class="nav-link" href="#" onclick="showCardPopup(); return false;">
                         <i class="fas fa-id-card"></i> VISITING CARD
@@ -404,201 +409,30 @@
         crossorigin="anonymous"></script>
 
     <script>
+        // Hero navigation
         function navigateTo(page) {
             window.location.href = page;
         }
 
-        function showLoginPopup() {
-            document.getElementById('loginPopup').classList.add('active');
-            document.getElementById('loginError').textContent = '';
-            document.getElementById('loginForm').reset();
-            document.getElementById('userId').focus();
-        }
-
-        function hideLoginPopup() {
-            document.getElementById('loginPopup').classList.remove('active');
-        }
-
-        async function validateLogin(event) {
-            event.preventDefault();
-            const userIdInput = document.getElementById('userId');
-            const passwordInput = document.getElementById('password');
-            const errorMsg = document.getElementById('loginError');
-            const btn = document.querySelector('.btn-login-glow');
-            const originalBtnText = btn.innerHTML;
-
-            // Simple client-side check before API
-            if (!userIdInput.value || !passwordInput.value) {
-                errorMsg.style.color = "#ff4c4c";
-                errorMsg.textContent = "Please fill in all fields.";
-                return false;
-            }
-
-            // Loading State
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
-            btn.disabled = true;
-            errorMsg.textContent = '';
-
-            try {
-                const res = await fetch('/api/admin/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: userIdInput.value.trim(),
-                        password: passwordInput.value.trim()
-                    })
-                });
-
-                const data = await res.json();
-
-                if (data.success) {
-                    errorMsg.style.color = "#4BB543"; // Success Green
-                    errorMsg.innerHTML = '<i class="fas fa-check-circle me-1"></i> Access Granted. Redirecting...';
-
-                    // Set Auth
-                    localStorage.setItem('isAdmin', 'true');
-
-                    setTimeout(() => {
-                        window.location.href = "admin.html";
-                    }, 800);
-                } else {
-                    errorMsg.style.color = "#ff4c4c"; // Error Red
-                    errorMsg.innerHTML = '<i class="fas fa-exclamation-circle me-1"></i> Invalid Credentials';
-
-                    // Shake animation effect
-                    const popup = document.querySelector('.popup-content');
-                    popup.style.transform = "translateX(10px)";
-                    setTimeout(() => popup.style.transform = "translateX(-10px)", 100);
-                    setTimeout(() => popup.style.transform = "translateX(0)", 200);
-                }
-            } catch (err) {
-                console.error(err);
-                errorMsg.style.color = "#ff4c4c";
-                errorMsg.textContent = "Server connection error.";
-            } finally {
-                btn.innerHTML = originalBtnText;
-                btn.disabled = false;
-            }
-            return false;
-        }
-
-        function showCardPopup() {
-            document.getElementById('cardPopup').classList.add('active');
-        }
-
-        function hideCardPopup() {
-            document.getElementById('cardPopup').classList.remove('active');
-        }
-
-        const imageViewer = document.getElementById('imageViewer');
-        const fullScreenImage = document.getElementById('fullScreenImage');
-
-        function openImageViewer(src) {
-            fullScreenImage.src = src;
-            imageViewer.classList.add('active');
-        }
-
-        function closeImageViewer() {
-            imageViewer.classList.remove('active');
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape") {
-                if (document.getElementById('loginPopup').classList.contains('active')) {
-                    hideLoginPopup();
-                }
-                if (document.getElementById('cardPopup').classList.contains('active')) {
-                    hideCardPopup();
-                }
-                if (imageViewer.classList.contains('active')) {
-                    closeImageViewer();
-                }
-            }
-        });
-
-        document.querySelector('#loginPopup .close-btn').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                hideLoginPopup();
-            }
-        });
-
-        document.querySelector('#cardPopup .close-btn').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                hideCardPopup();
-            }
-        });
-
-        document.querySelector('.close-viewer-btn').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                closeImageViewer();
-            }
-        });
-
-        // Clerk Initialization
-        window.addEventListener('load', async function () {
-            console.log("🚀 Clerk Loading Started...");
-            if (window.Clerk) {
-                try {
-                    await window.Clerk.load({
-                        appearance: {
-                            baseTheme: 'dark',
-                            variables: {
-                                colorPrimary: '#fcdc3b',
-                                borderRadius: '12px'
-                            }
-                        }
-                    });
-                    console.log("✅ Clerk Loaded Successfully");
-
-                    const userButtonDiv = document.getElementById('user-button');
-
-                    if (window.Clerk.user) {
-                        console.log("👤 User Signed In:", window.Clerk.user.id);
-                        if (userButtonDiv) {
-                            window.Clerk.mountUserButton(userButtonDiv);
-                        }
-                    } else {
-                        console.log("👋 User Signed Out");
-                        if (userButtonDiv) {
-                            userButtonDiv.innerHTML = `
-                                <button id="sign-in-btn" class="join-us-btn" style="background: transparent; border: 2px solid #fcdc3b; margin-right: 10px; color: white !important;">
-                                    SIGN IN
-                                </button>
-                            `;
-                            document.getElementById('sign-in-btn').addEventListener('click', () => {
-                                window.Clerk.openSignIn();
-                            });
-                        }
-                    }
-                } catch (err) {
-                    console.error("❌ Clerk Load Error:", err);
-                }
-            } else {
-                console.error("❌ Clerk window object not found");
-            }
+        // Home Reviews Loading
+        window.addEventListener('load', () => {
             loadHomeReviews();
         });
-
-        function accessDashboard() {
-            if (window.Clerk && window.Clerk.user) {
-                window.location.href = 'user-dashboard.html';
-            } else {
-                if (window.Clerk) {
-                    window.Clerk.openSignIn();
-                } else {
-                    window.location.href = 'user-dashboard.html';
-                }
-            }
-        }
 
         async function loadHomeReviews() {
             try {
                 const res = await fetch('/api/reviews');
                 const reviews = await res.json();
                 const container = document.getElementById('home-reviews-container');
+
+                if (!container) return;
+
+                // Sanitize text to prevent XSS
+                function sanitize(str) {
+                    const div = document.createElement('div');
+                    div.textContent = str || '';
+                    return div.innerHTML;
+                }
 
                 if (reviews.length === 0) {
                     container.innerHTML = '<p class="text-white-50 text-center">No reviews yet.</p>';
@@ -611,34 +445,25 @@
                         <div class="glass-panel h-100 p-4" style="background: rgba(255,255,255,0.05); border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div>
-                                    <h5 class="text-gold fw-bold mb-1" style="color: #fcdc3b;">${r.name}</h5>
-                                    <span class="badge" style="background: rgba(255,255,255,0.1); color: white;">${r.serviceType}</span>
+                                    <h5 class="text-gold fw-bold mb-1" style="color: #fcdc3b;">${sanitize(r.name)}</h5>
+                                    <span class="badge" style="background: rgba(255,255,255,0.1); color: white;">${sanitize(r.serviceType)}</span>
                                 </div>
                                 <div style="color: #fcdc3b;">
-                                    ${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}
+                                    ${'★'.repeat(Math.min(Math.max(parseInt(r.rating) || 0, 0), 5))}${'☆'.repeat(5 - Math.min(Math.max(parseInt(r.rating) || 0, 0), 5))}
                                 </div>
                             </div>
-                            <p class="text-white-50 fst-italic mb-3">"${r.comment}"</p>
+                            <p class="text-white-50 fst-italic mb-3">"${sanitize(r.comment)}"</p>
                         </div>
                     </div>
                 `).join('');
             } catch (err) {
                 console.error(err);
-                document.getElementById('home-reviews-container').innerHTML = '';
+                const container = document.getElementById('home-reviews-container');
+                if (container) container.innerHTML = '';
             }
         }
     </script>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        function showCardPopup() {
-            // Placeholder for visiting card logic
-            alert("Visiting Card feature coming soon!");
-        }
-        function navigateTo(url) {
-            window.location.href = url;
-        }
-    </script>
+    <!-- Custom Auth Script -->
+    <script src="js/auth.js"></script>
 </body>

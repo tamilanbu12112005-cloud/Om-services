@@ -27,7 +27,21 @@ const partnerSchema = new mongoose.Schema({
     // Images
     images: [{ type: String }], // Array of file paths
     
-    createdAt: { type: Date, default: Date.now }
+    // Admin Fields
+    status: { 
+        type: String, 
+        enum: ['Pending', 'Approved', 'Rejected'],
+        default: 'Pending' 
+    },
+    adminNote: { type: String, default: '' },
+    
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+
+// Update the 'updatedAt' field before saving
+partnerSchema.pre('save', function() {
+    this.updatedAt = Date.now();
 });
 
 module.exports = mongoose.model('Partner', partnerSchema);

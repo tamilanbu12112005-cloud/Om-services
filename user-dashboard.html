@@ -21,10 +21,10 @@
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <!-- Clerk Auth -->
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"
-        data-clerk-publishable-key="pk_test_bW92ZWQtcHJpbWF0ZS00LmNsZXJrLmFjY291bnRzLmRldiQ" crossorigin="anonymous">
-        </script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Common UI Script -->
+    <script src="js/ui.js" defer></script>
 
     <style>
         :root {
@@ -36,9 +36,9 @@
             --success-green: #10b981;
             --danger-red: #ef4444;
             --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            --text-muted: rgba(255, 255, 255, 0.5);
-            --border-light: rgba(252, 220, 59, 0.2);
+            --text-secondary: rgba(255, 255, 255, 0.85);
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --border-light: rgba(252, 220, 59, 0.25);
             --shadow-primary: 0 20px 40px rgba(252, 220, 59, 0.1);
             --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.4);
             --gradient-primary: linear-gradient(135deg, #19021C 0%, #250329 100%);
@@ -51,89 +51,15 @@
             box-sizing: border-box;
         }
 
-        body {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a0d1f 50%, #0f0f0f 100%);
-            font-family: 'Outfit', sans-serif;
-            color: var(--text-primary);
-            overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 80%, rgba(252, 220, 59, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* Enhanced Navbar */
-        .navbar {
-            background: rgba(25, 2, 28, 0.95) !important;
-            backdrop-filter: blur(20px);
-            box-shadow: var(--shadow-primary);
-            border-bottom: 1px solid var(--border-light);
-            padding: 1rem 0;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            padding: 0.5rem 0;
-            background: rgba(25, 2, 28, 0.98) !important;
-        }
-
-        .navbar-brand img {
-            height: 55px;
-            filter: drop-shadow(0 4px 8px rgba(252, 220, 59, 0.3));
-            transition: transform 0.3s ease;
-        }
-
-        .navbar-brand:hover img {
-            transform: scale(1.05);
-        }
-
-        .nav-link {
-            color: var(--text-secondary) !important;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem !important;
-            border-radius: 12px;
-            margin: 0 0.25rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(252, 220, 59, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--primary-gold) !important;
-            background: rgba(252, 220, 59, 0.1);
-            transform: translateY(-2px);
+        /* Dashboard specific variables overrides */
+        :root {
+            --primary-gold: #fcdc3b;
+            --gradient-gold: linear-gradient(135deg, #fcdc3b 0%, #fbbf24 100%);
         }
 
         /* Dashboard Container */
         .dashboard-container {
-            padding-top: 120px;
+            padding-top: 130px;
             padding-bottom: 80px;
             max-width: 1500px;
             margin: 0 auto;
@@ -177,8 +103,9 @@
 
         /* Enhanced Panels/Cards */
         .dash-panel {
-            background: var(--gradient-primary);
-            border: 1px solid var(--border-light);
+            background: rgba(45, 12, 50, 0.4);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(252, 220, 59, 0.15);
             border-radius: 20px;
             padding: 2.5rem;
             height: 100%;
@@ -205,6 +132,21 @@
             box-shadow: 0 30px 60px rgba(252, 220, 59, 0.15);
         }
 
+        /* Form Inputs */
+        .form-control {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(252, 220, 59, 0.2) !important;
+            color: white !important;
+            border-radius: 10px;
+            padding: 12px 15px;
+        }
+
+        .form-control:focus {
+            background: rgba(40, 5, 50, 0.4) !important;
+            border-color: #fcdc3b !important;
+            box-shadow: 0 0 15px rgba(252, 220, 59, 0.2) !important;
+        }
+
         /* Enhanced Profile Section */
         .profile-img-container {
             position: relative;
@@ -218,14 +160,14 @@
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
-            border: 4px solid var(--primary-gold);
-            box-shadow: 0 0 30px rgba(252, 220, 59, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: none;
             transition: all 0.3s ease;
         }
 
         .profile-img-container:hover .profile-img {
             transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(252, 220, 59, 0.6);
+            box-shadow: none;
         }
 
         .camera-btn {
@@ -243,19 +185,19 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(252, 220, 59, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             font-size: 1.1rem;
         }
 
         .camera-btn:hover {
             transform: scale(1.15) rotate(5deg);
-            box-shadow: 0 6px 20px rgba(252, 220, 59, 0.6);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
         /* Enhanced Stats Cards */
         .stat-card {
-            background: rgba(37, 3, 41, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 1.5rem;
@@ -320,35 +262,32 @@
         }
 
         .stat-label {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
         }
-
         /* Enhanced Form Styles */
-        .form-control,
-        .form-control:focus {
-            background: rgba(37, 3, 41, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(252, 220, 59, 0.3);
-            border-radius: 12px;
-            color: var(--text-primary);
-            padding: 0.875rem 1.25rem;
+        .form-control {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(252, 220, 59, 0.3) !important;
+            color: white !important;
+            border-radius: 10px;
+            padding: 12px 15px;
             font-weight: 500;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .form-control:focus {
-            border-color: var(--primary-gold);
-            box-shadow: 0 0 0 0.25rem rgba(252, 220, 59, 0.15), 0 8px 25px rgba(252, 220, 59, 0.1);
-            background: rgba(37, 3, 41, 0.95);
+            background: rgba(40, 5, 50, 0.4) !important;
+            border-color: #fcdc3b !important;
+            box-shadow: 0 0 15px rgba(252, 220, 59, 0.2) !important;
         }
 
         .form-control::placeholder {
-            color: var(--text-muted);
+            color: rgba(255, 255, 255, 0.6);
         }
 
         label {
@@ -362,9 +301,9 @@
 
         /* Enhanced Booking Rows */
         .booking-row {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 1.75rem;
             margin-bottom: 1rem;
@@ -562,6 +501,60 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--gradient-gold);
         }
+        /* Review Styles */
+        .review-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(252, 220, 59, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .review-card:hover {
+            border-color: rgba(252, 220, 59, 0.3);
+            transform: translateY(-5px);
+        }
+        .star-rating { color: #6c757d; font-size: 0.9rem; }
+        .star-rating .filled { color: var(--primary-gold); }
+        .star-input .fa-star {
+            font-size: 1.8rem;
+            color: #6c757d;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .star-input .fa-star.filled {
+            color: var(--primary-gold);
+        }
+        .review-img-thumb {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .btn-review-action {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        .btn-review-action:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .modal-content.premium-modal {
+            background: #19021C;
+            border: 1px solid var(--primary-gold);
+            border-radius: 25px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+        }
+        .modal-header { border-bottom: 1px solid rgba(252, 220, 59, 0.1); }
+        .modal-footer { border-top: 1px solid rgba(252, 220, 59, 0.1); }
     </style>
 </head>
 
@@ -575,7 +568,8 @@
             </a>
 
             <!-- Mobile Toggler -->
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#ultimateNav">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#ultimateNav">
                 <i class="fas fa-bars text-gold fs-2"></i>
             </button>
 
@@ -594,6 +588,12 @@
                     <a class="nav-link" href="reviews.html">
                         <i class="fas fa-star"></i> REVIEWS
                     </a>
+                    <a class="nav-link" href="offers.html">
+                        <i class="fas fa-tags"></i> OFFERS
+                    </a>
+                    <a class="nav-link" href="#" onclick="showCardPopup(); return false;">
+                        <i class="fas fa-id-card"></i> VISITING CARD
+                    </a>
                     <a class="nav-link active" href="user-dashboard.html">
                         <i class="fas fa-tachometer-alt"></i> DASHBOARD
                     </a>
@@ -601,7 +601,7 @@
 
                 <!-- Right Side -->
                 <div class="d-flex align-items-center justify-content-center gap-3 mt-3 mt-lg-0">
-                    <div id="user-button"></div>
+                    <div id="user-button" style="color: white;"></div>
                     <a href="join.html" class="join-us-btn">
                         JOIN US
                     </a>
@@ -645,27 +645,27 @@
                                 <h3 id="display-name" class="fw-bold mb-2 animate__animated animate__fadeIn">Loading...
                                 </h3>
                                 <p id="display-email"
-                                    class="text-muted small mb-0 animate__animated animate__fadeIn animate__delay-1s">
+                                    class="text-white-50 small mb-0 animate__animated animate__fadeIn animate__delay-1s">
                                     Loading email...</p>
                             </div>
                             <div class="col-md-8 pt-4 pt-md-0 ps-md-5">
                                 <form id="profileForm">
                                     <div class="row g-3">
                                         <div class="col-lg-6">
-                                            <label><i class="fas fa-user me-1"></i>Full Name</label>
+                                            <label class="text-gold fw-bold mb-2"><i class="fas fa-user me-1"></i>Full Name</label>
                                             <input type="text" id="prof-name" class="form-control" required>
                                         </div>
                                         <div class="col-lg-6">
-                                            <label><i class="fas fa-phone me-1"></i>Phone Number</label>
+                                            <label class="text-gold fw-bold mb-2"><i class="fas fa-phone me-1"></i>Phone Number</label>
                                             <input type="tel" id="prof-phone" class="form-control" required>
                                         </div>
                                         <div class="col-lg-6">
-                                            <label><i class="fas fa-birthday-cake me-1"></i>Age</label>
+                                            <label class="text-gold fw-bold mb-2"><i class="fas fa-birthday-cake me-1"></i>Age</label>
                                             <input type="number" id="prof-age" class="form-control" min="18" max="100"
                                                 required>
                                         </div>
                                         <div class="col-lg-6">
-                                            <label><i class="fas fa-map-marker-alt me-1"></i>Location</label>
+                                            <label class="text-gold fw-bold mb-2"><i class="fas fa-map-marker-alt me-1"></i>Location</label>
                                             <input type="text" id="prof-address" class="form-control" required>
                                         </div>
                                         <div class="col-12 text-end mt-4">
@@ -691,15 +691,15 @@
                         <div class="row g-4">
                             <div class="col-6">
                                 <div id="total-bookings-count" class="h2 text-gold fw-bold mb-2">0</div>
-                                <small class="text-uppercase text-muted fw-bold">Total Bookings</small>
+                                <small class="text-uppercase text-white-50 fw-bold">Total Bookings</small>
                             </div>
                             <div class="col-6">
                                 <div id="active-bookings-count" class="h2 text-gold fw-bold mb-2">0</div>
-                                <small class="text-uppercase text-muted fw-bold">Active</small>
+                                <small class="text-uppercase text-white-50 fw-bold">Active</small>
                             </div>
                         </div>
                         <div class="mt-4 pt-4 border-top border-warning border-opacity-25">
-                            <p class="text-muted small mb-3">Ready for your next celebration?</p>
+                            <p class="text-white-50 small mb-3">Ready for your next celebration?</p>
                             <a href="go.html" class="btn btn-warning w-100 fw-bold py-2">
                                 <i class="fas fa-plus-circle me-2"></i>Book New Service
                             </a>
@@ -754,6 +754,72 @@
                     <!-- Dynamic content -->
                 </div>
             </div>
+
+            <!-- My Reviews Section -->
+            <div class="section-header mt-5">
+                <i class="fas fa-star"></i>
+                My Experience & Reviews
+                <button class="btn btn-warning ms-auto fw-bold btn-sm" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                    <i class="fas fa-pencil-alt me-1"></i>Share Experience
+                </button>
+            </div>
+            <div class="dash-panel">
+                <div id="reviews-container" class="row g-4">
+                    <div class="col-12 text-center py-5 text-white-50">
+                        <i class="fas fa-comment-dots fa-3x mb-3 opacity-25"></i>
+                        <p>You haven't shared any reviews yet. Help others by sharing your experience!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal fade" id="reviewModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content premium-modal">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-gold fw-bold"><i class="fas fa-pen-fancy me-2"></i>Share Your Story</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="reviewForm">
+                        <input type="hidden" id="editReviewId" value="">
+                        <div class="mb-4">
+                            <label class="text-gold fw-bold mb-2">Overall Rating</label>
+                            <div class="star-input text-center py-2" id="starRatingInput">
+                                <i class="fas fa-star" data-value="1"></i>
+                                <i class="fas fa-star" data-value="2"></i>
+                                <i class="fas fa-star" data-value="3"></i>
+                                <i class="fas fa-star" data-value="4"></i>
+                                <i class="fas fa-star" data-value="5"></i>
+                            </div>
+                            <input type="hidden" id="ratingValue" value="0">
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-gold fw-bold mb-2">Your Experience</label>
+                            <textarea class="form-control" id="reviewComment" rows="4" placeholder="How was our service? Your feedback matters to us..." required></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-gold fw-bold mb-2">Service Type</label>
+                            <select class="form-control" id="reviewServiceType">
+                                <option value="General">General Service</option>
+                                <option value="Catering">Catering</option>
+                                <option value="Travels">Travels</option>
+                                <option value="Photography">Photography</option>
+                                <option value="Sweets">Sweets</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-gold fw-bold mb-2">Add Photo (Optional)</label>
+                            <input type="file" class="form-control" id="reviewImage" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100 fw-bold py-3 mt-2 shadow-sm rounded-pill">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Review
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -801,6 +867,8 @@
         </div>
     </div>
 
+    <!-- Premium Notifier -->
+    <script src="js/premium-notify.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -829,66 +897,86 @@
             }
         });
 
-        window.addEventListener('load', async function () {
-            if (window.Clerk) {
-                await window.Clerk.load({
-                    appearance: {
-                        baseTheme: 'dark',
-                        variables: {
-                            colorPrimary: '#fcdc3b',
-                            borderRadius: '12px',
-                            fontFamily: "'Outfit', sans-serif",
-                            colorInputBackground: 'rgba(37, 3, 41, 0.8)'
-                        }
-                    }
-                });
+        // Dashboard initialization handler
+        function handleAuthReady() {
+            const user = window.__authUser;
 
-                if (!Clerk.user) {
-                    document.getElementById('loading').innerHTML = `
-                        <div class="text-center">
-                            <i class="fas fa-user-lock text-gold fs-1 mb-4"></i>
-                            <h3 class="text-white mb-4">Authentication Required</h3>
-                            <p class="text-muted mb-4">Please sign in to access your personalized dashboard</p>
-                            <button onclick="Clerk.openSignIn({ redirectUrl: 'user-dashboard.html' })" 
-                                    class="btn btn-warning px-5 py-3 fs-5 fw-bold">
-                                <i class="fas fa-sign-in-alt me-2"></i>Sign In Now
-                            </button>
-                        </div>
-                    `;
-                    return;
-                }
-
-                Clerk.mountUserButton(document.getElementById('user-button'));
-                editModal = new bootstrap.Modal(document.getElementById('editBookingModal'));
-
-                // Set basic user info with animation
-                document.getElementById('display-name').textContent = Clerk.user.fullName || 'User';
-                document.getElementById('display-email').textContent = Clerk.user.primaryEmailAddress?.emailAddress || 'email@example.com';
-                // Use a reliable internal placeholder or data URI instead of external service
-                const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Crect width='140' height='140' fill='%23250329'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='60' fill='%23fcdc3b' text-anchor='middle' dy='.35em'%3E%F0%9F%91%A4%3C/text%3E%3C/svg%3E";
-                document.getElementById('user-avatar').src = Clerk.user.imageUrl || defaultAvatar;
-
-                // Trigger animations
-                document.querySelectorAll('.animate__animated').forEach(el => {
-                    el.style.animationPlayState = 'running';
-                });
-
-                loadDashboardData();
+            if (!user) {
+                document.getElementById('loading').innerHTML = `
+                    <div class="text-center">
+                        <i class="fas fa-user-lock text-gold fs-1 mb-4"></i>
+                        <h3 class="text-white mb-4">Authentication Required</h3>
+                        <p class="text-muted mb-4">Please sign in to access your personalized dashboard</p>
+                        <button onclick="showAuthModal()" 
+                                class="btn btn-warning px-5 py-3 fs-5 fw-bold">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In Now
+                        </button>
+                    </div>
+                `;
+                return;
             }
+
+            // Prevent double-init
+            if (window._dashboardInitialized) return;
+            window._dashboardInitialized = true;
+
+            // User is signed in, setup UI
+            editModal = new bootstrap.Modal(document.getElementById('editBookingModal'));
+
+            // Set user info
+            document.getElementById('display-name').textContent = user.name || user.email?.split('@')[0] || 'User';
+            document.getElementById('display-email').textContent = user.email || 'email@example.com';
+
+            const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Crect width='140' height='140' fill='%23250329'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='60' fill='%23fcdc3b' text-anchor='middle' dy='.35em'%3E%F0%9F%91%A4%3C/text%3E%3C/svg%3E";
+            document.getElementById('user-avatar').src = user.profileImage || defaultAvatar;
+
+            // Trigger animations
+            document.querySelectorAll('.animate__animated').forEach(el => {
+                el.style.animationPlayState = 'running';
+            });
+
+            // Load data from DB
+            loadDashboardData(user);
+        }
+
+        // Listen on BOTH window and document (auth.js dispatches on both)
+        window.addEventListener('auth-ready', handleAuthReady);
+        document.addEventListener('auth-ready', handleAuthReady);
+
+        // Fallback: if auth.js already ran before these listeners were registered
+        // (happens when script is in <head> and DOMContentLoaded fires fast)
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (!window._dashboardInitialized) {
+                    console.log('🔄 Fallback: auth-ready may have fired early, checking user...');
+                    handleAuthReady();
+                }
+            }, 500);
         });
 
-        async function loadDashboardData() {
+        // Extra safety: check immediately if user is already available
+        if (document.readyState !== 'loading' && !window._dashboardInitialized) {
+            setTimeout(handleAuthReady, 200);
+        }
+
+        async function loadDashboardData(user) {
             try {
+                if (!user) {
+                    user = window.__authUser;
+                }
+                if (!user) return;
+
                 // Load profile data
-                const profileRes = await fetch(`/api/user/${Clerk.user.id}`);
+                const userEmail = user.email;
+                const profileRes = await fetch(`/api/user-by-email/${userEmail}`);
                 const profileData = await profileRes.json();
 
                 if (profileRes.ok && profileData.email) {
-                    document.getElementById('prof-name').value = profileData.name || Clerk.user.fullName;
+                    document.getElementById('prof-name').value = profileData.name || user.name || '';
                     document.getElementById('prof-phone').value = profileData.phone || '';
                     document.getElementById('prof-age').value = profileData.age || '';
                     document.getElementById('prof-address').value = profileData.location || '';
-                    document.getElementById('display-name').textContent = profileData.name || Clerk.user.fullName;
+                    document.getElementById('display-name').textContent = profileData.name || user.name || user.email?.split('@')[0] || 'User';
 
                     if (profileData.profileImage) {
                         document.getElementById('user-avatar').src = profileData.profileImage;
@@ -896,12 +984,13 @@
                 }
 
                 // Load bookings data
-                const email = Clerk.user.primaryEmailAddress.emailAddress;
+                const email = user.email;
                 const bookingRes = await fetch(`/api/user-bookings/${email}`);
                 const bookings = await bookingRes.json();
 
                 calculateStats(bookings);
                 renderBookings(bookings);
+                loadUserReviews(user.email);
 
             } catch (err) {
                 console.error('Dashboard load error:', err);
@@ -944,17 +1033,64 @@
             document.getElementById('stat-sweets').textContent = stats.sweets;
         }
 
+        function getStatusIcon(status) {
+            switch (status?.toLowerCase()) {
+                case 'completed': return 'fa-check-circle';
+                case 'cancelled': return 'fa-times-circle';
+                case 'confirmed': return 'fa-calendar-check';
+                default: return 'fa-clock';
+            }
+        }
+
+        function formatBookingDetails(booking) {
+            const type = (booking.serviceType || '').toLowerCase();
+            const items = [];
+
+            if (type.includes('catering')) {
+                if (booking.cateringStyle) items.push(`Style: ${booking.cateringStyle}`);
+                if (booking.mealType) items.push(`Meal: ${booking.mealType}`);
+                if (booking.guests) items.push(`Guests: ${booking.guests}`);
+                if (booking.eventDuration) items.push(`Days: ${booking.eventDuration}`);
+            } else if (type.includes('travel') || type.includes('bus') || type.includes('car')) {
+                if (booking.pickupLocation) items.push(`From: ${booking.pickupLocation}`);
+                if (booking.dropDestination) items.push(`To: ${booking.dropDestination}`);
+                if (booking.departureSlot) items.push(`Slot: ${booking.departureSlot}`);
+                if (booking.travelDuration) items.push(`Duration: ${booking.travelDuration}`);
+                if (booking.passengerCount) items.push(`Passengers: ${booking.passengerCount}`);
+            } else if (type.includes('photo')) {
+                if (booking.eventType) items.push(`Event: ${booking.eventType}`);
+                if (booking.photographyDuration) items.push(`Hours: ${booking.photographyDuration}`);
+            } else if (type.includes('sweet')) {
+                if (booking.sweetQuantity) items.push(`Qty: ${booking.sweetQuantity}`);
+                if (booking.functionTime) items.push(`Time: ${booking.functionTime}`);
+            }
+
+            // Also check for 'details' or 'notes' if they exist generically
+            const manualDetails = booking.details || booking.notes;
+            if (manualDetails) items.push(`Notes: ${manualDetails}`);
+
+            if (items.length === 0) return '';
+            
+            return `
+                <div class="mt-2 d-flex flex-wrap gap-2">
+                    ${items.map(i => `<span class="badge bg-white bg-opacity-10 text-white-50 border border-white border-opacity-10">${i}</span>`).join('')}
+                </div>
+            `;
+        }
+
         function renderBookings(bookings) {
             const container = document.getElementById('bookings-container');
 
             if (!bookings || bookings.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-5 my-5">
-                        <i class="fas fa-calendar-times text-muted fs-1 mb-4"></i>
-                        <h5 class="text-muted mb-3">No bookings yet</h5>
-                        <p class="text-muted small mb-4">Get started by booking your first service</p>
-                        <a href="go.html" class="btn btn-warning px-5 py-2">
-                            <i class="fas fa-plus me-2"></i>Book Service
+                        <div class="mb-4">
+                            <i class="fas fa-calendar-times text-gold fs-1" style="opacity: 0.5;"></i>
+                        </div>
+                        <h5 class="text-gold fw-bold mb-3">No bookings yet</h5>
+                        <p class="text-white-50 fs-6 mb-4">Get started by booking your first service to see it here!</p>
+                        <a href="go.html" class="btn btn-warning px-5 py-3 fw-bold">
+                            <i class="fas fa-plus me-2"></i>Book New Service
                         </a>
                     </div>
                 `;
@@ -963,28 +1099,34 @@
 
             container.innerHTML = bookings.map((booking, index) => {
                 const delay = index * 100;
-                const statusColor = booking.status?.toLowerCase() === 'completed' ? 'success' :
-                    booking.status?.toLowerCase() === 'cancelled' ? 'danger' : 'warning';
+                const statusValue = (booking.status || 'Pending').toLowerCase();
+                const statusColor = statusValue === 'completed' ? 'success' :
+                    statusValue === 'cancelled' ? 'danger' :
+                    statusValue === 'confirmed' ? 'info' : 'warning';
+                
                 const statusText = booking.status || 'Pending';
 
                 return `
                     <div class="booking-row animate__animated animate__fadeInUp" style="animation-delay: ${delay}ms">
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center w-100">
                             <div class="flex-grow-1 me-md-4">
-                                <div class="booking-service">${booking.serviceType}</div>
-                                <div class="booking-date mb-2">
-                                    <i class="far fa-calendar-alt me-2"></i>
-                                    ${new Date(booking.date).toLocaleDateString('en-IN', {
-                    weekday: 'short',
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                })}
+                                <div class="d-flex align-items-center mb-1">
+                                    <span class="booking-service">${booking.serviceType || 'Booking'}</span>
+                                    <span class="badge bg-${statusColor} text-dark ms-3 fw-bold">${statusText}</span>
                                 </div>
-                                ${booking.details ? `<div class="text-muted small"><i class="fas fa-info-circle me-1"></i>${booking.details}</div>` : ''}
+                                <div class="text-white fw-bold small mb-2 opacity-75">${booking.serviceName || ''}</div>
+                                <div class="booking-date mb-1">
+                                    <i class="far fa-calendar-alt me-2 text-gold"></i>
+                                    ${new Date(booking.date).toLocaleDateString('en-IN', {
+                        weekday: 'short',
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    })}
+                                </div>
+                                ${formatBookingDetails(booking)}
                             </div>
                             <div class="d-flex flex-column flex-md-row align-items-md-center mt-3 mt-md-0">
-                                <span class="badge bg-${statusColor} text-dark fw-bold px-3 py-2 mb-2 mb-md-0 me-md-3">${statusText}</span>
                                 <button class="action-btn" onclick="openEditModal(${JSON.stringify(booking)})">
                                     <i class="fas fa-edit me-1"></i>Edit
                                 </button>
@@ -1007,9 +1149,11 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
             btn.disabled = true;
 
+            const user = window.__authUser;
+            if (!user) return;
+
             const formData = new FormData();
-            formData.append('clerkId', Clerk.user.id);
-            formData.append('email', Clerk.user.primaryEmailAddress.emailAddress);
+            formData.append('email', user.email);
             formData.append('name', document.getElementById('prof-name').value);
             formData.append('phone', document.getElementById('prof-phone').value);
             formData.append('age', document.getElementById('prof-age').value);
@@ -1019,14 +1163,6 @@
             if (document.getElementById('prof-image').files[0]) {
                 const file = document.getElementById('prof-image').files[0];
                 formData.append('profileImage', file);
-
-                if (window.Clerk?.user) {
-                    try {
-                        await window.Clerk.user.setProfileImage({ file });
-                    } catch (clerkErr) {
-                        console.warn('Clerk image sync failed:', clerkErr);
-                    }
-                }
             }
 
             try {
@@ -1101,7 +1237,7 @@
         }
 
         async function deleteBooking(id) {
-            if (confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
+            if (await confirmReplacement('Are you sure you want to cancel this booking? This action cannot be undone.')) {
                 try {
                     const response = await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
                     if (response.ok) {
@@ -1114,7 +1250,280 @@
                 }
             }
         }
-    </script>
-</body>
 
+        // --- NEW REVIEW LOGIC ---
+        let currentReviewRating = 0;
+        const dashReviewForm = document.getElementById('reviewForm');
+        const reviewStars = document.querySelectorAll('#starRatingInput .fa-star');
+
+        reviewStars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+                resetReviewStars();
+                highlightReviewStars(this.dataset.value);
+            });
+            star.addEventListener('mouseout', resetReviewStars);
+            star.addEventListener('click', function () {
+                currentReviewRating = parseInt(this.dataset.value);
+                document.getElementById('ratingValue').value = currentReviewRating;
+                highlightReviewStars(currentReviewRating);
+                reviewStars.forEach(s => s.removeEventListener('mouseout', resetReviewStars));
+            });
+        });
+
+        function highlightReviewStars(rating) {
+            for (let i = 0; i < rating; i++) reviewStars[i].classList.add('filled');
+        }
+        function resetReviewStars() {
+            reviewStars.forEach(s => s.classList.remove('filled'));
+            if (currentReviewRating > 0) highlightReviewStars(currentReviewRating);
+        }
+        dashReviewForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = window.__authUser;
+            if (!user) return;
+
+            const editId = document.getElementById('editReviewId').value;
+            const btn = e.target.querySelector('button');
+            const originalBtn = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+
+            const imageFile = document.getElementById('reviewImage').files[0];
+            let imageBase64 = null;
+            if (imageFile) {
+                imageBase64 = await resizeAndConvertToBase64(imageFile, 800, 0.7);
+            }
+
+            const payload = {
+                name: user.name || user.email.split('@')[0],
+                email: user.email,
+                rating: parseInt(document.getElementById('ratingValue').value),
+                comment: document.getElementById('reviewComment').value,
+                serviceType: document.getElementById('reviewServiceType').value
+            };
+            if (imageBase64) payload.image = imageBase64;
+
+            try {
+                const url = editId ? `/api/reviews/${editId}` : '/api/reviews';
+                const method = editId ? 'PUT' : 'POST';
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (res.ok) {
+                    alert(editId ? '✅ Review updated successfully!' : '✅ Review shared successfully!');
+                    bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
+                    dashReviewForm.reset();
+                    document.getElementById('editReviewId').value = "";
+                    currentReviewRating = 0;
+                    resetReviewStars();
+                    
+                    // Restore modal header/button
+                    document.querySelector('#reviewModal .modal-title').innerHTML = '<i class="fas fa-pen-fancy me-2"></i>Share Your Story';
+                    document.querySelector('#reviewForm button[type="submit"]').innerHTML = '<i class="fas fa-paper-plane me-2"></i>Submit Review';
+                    
+                    loadUserReviews(user.email);
+                }
+            } catch (err) {
+                console.error('Review operation failed:', err);
+                alert('❌ Connection failed');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalBtn;
+            }
+        });
+
+        window.openEditReviewModal = (id, rating, comment, serviceType) => {
+            document.getElementById('editReviewId').value = id;
+            document.getElementById('ratingValue').value = rating;
+            document.getElementById('reviewComment').value = comment;
+            document.getElementById('reviewServiceType').value = serviceType;
+            
+            // UI Update
+            currentReviewRating = rating;
+            highlightReviewStars(rating); // Changed from updateReviewStars to highlightReviewStars
+            
+            document.querySelector('#reviewModal .modal-title').innerHTML = '<i class="fas fa-edit me-2"></i>Edit Review';
+            document.querySelector('#reviewForm button[type="submit"]').innerHTML = '<i class="fas fa-check-circle me-2"></i>Update Review';
+            
+            const modal = new bootstrap.Modal(document.getElementById('reviewModal'));
+            modal.show();
+        };
+
+        // Reset form when clicking "Share Experience" button
+        document.querySelector('[data-bs-target="#reviewModal"]').addEventListener('click', () => {
+             document.getElementById('editReviewId').value = "";
+             dashReviewForm.reset();
+             currentReviewRating = 0;
+             resetReviewStars();
+             document.querySelector('#reviewModal .modal-title').innerHTML = '<i class="fas fa-pen-fancy me-2"></i>Share Your Story';
+             document.querySelector('#reviewForm button[type="submit"]').innerHTML = '<i class="fas fa-paper-plane me-2"></i>Submit Review';
+        });
+        
+
+        function resizeAndConvertToBase64(file, maxWidth, quality) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.onerror = error => reject(error);
+                };
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        async function loadUserReviews(email) {
+            const container = document.getElementById('reviews-container');
+            if (!container) { console.error('❌ reviews-container not found'); return; }
+            if (!email) { console.error('❌ No email provided to loadUserReviews'); return; }
+
+            console.log('📝 Loading reviews for:', email);
+            container.innerHTML = `<div class="col-12 text-center py-4"><div class="spinner-border text-warning" role="status"></div><p class="text-white-50 mt-2 small">Loading reviews...</p></div>`;
+
+            try {
+                const res = await fetch(`/api/user-reviews/${encodeURIComponent(email)}`);
+                console.log('📡 /api/user-reviews response status:', res.status);
+                const reviews = await res.json();
+                console.log('📦 Reviews data received:', reviews);
+
+                if (!Array.isArray(reviews)) {
+                    console.error('❌ Expected array but got:', typeof reviews, reviews);
+                    container.innerHTML = `<div class="col-12 text-center py-4 text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><p>Error loading reviews. Check console.</p></div>`;
+                    return;
+                }
+
+                if (reviews.length === 0) {
+                    console.log('ℹ️ No reviews found for email:', email);
+                    container.innerHTML = `
+                        <div class="col-12 text-center py-5 text-white-50">
+                            <i class="fas fa-comment-dots fa-3x mb-3 opacity-25"></i>
+                            <p>You haven't shared any reviews yet. Help others by sharing your experience!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                console.log(`✅ Rendering ${reviews.length} review(s)`);
+                container.innerHTML = reviews.map(r => `
+                    <div class="col-lg-4 col-md-6">
+                        <div class="review-card">
+                            ${r.image ? `<img src="${r.image}" class="review-img-thumb" alt="Review photo">` : ''}
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-gold text-dark fw-bold">${r.serviceType || 'General'}</span>
+                                <div class="star-rating">
+                                    ${[1, 2, 3, 4, 5].map(i => `<i class="fas fa-star ${i <= r.rating ? 'filled' : ''}"></i>`).join('')}
+                                </div>
+                            </div>
+                            <p class="text-white-50 small mb-3">"${r.comment}"</p>
+                             <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted"><i class="far fa-calendar-alt me-1"></i>${new Date(r.createdAt).toLocaleDateString()}</small>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-review-action" onclick="openEditReviewModal('${r._id}', ${r.rating}, '${(r.comment||'').replace(/'/g, "\\'")}', '${r.serviceType || 'General'}')">
+                                        <i class="fas fa-edit me-1"></i>Edit
+                                    </button>
+                                    <button class="btn-review-action text-danger" onclick="deleteReview('${r._id}')">
+                                        <i class="fas fa-trash-alt me-1"></i>Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error('❌ Load reviews exception:', err);
+                container.innerHTML = `<div class="col-12 text-center py-4 text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><p>Failed to load reviews. Check console.</p></div>`;
+            }
+        }
+
+        async function deleteReview(id) {
+            if (await confirmReplacement('Are you sure you want to delete your review permanently?')) {
+                try {
+                    const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        alert('✅ Review deleted successfully!');
+                        loadUserReviews(window.__authUser.email);
+                    }
+                } catch (err) {
+                    console.error('Delete review failed:', err);
+                    alert('❌ Failed to delete review');
+                }
+            }
+        }
+    </script>
+    <!-- Login Popup (Premium Design) -->
+    <div id="loginPopup">
+        <div class="popup-content glass-login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+            <span class="close-btn" aria-label="Close login popup" role="button" tabindex="0" onclick="hideLoginPopup()">
+                <i class="fas fa-times"></i>
+            </span>
+            <div class="login-header mb-4">
+                <div class="login-icon-circle">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h2 id="loginTitle" class="text-gold mt-3">Admin Portal</h2>
+                <p class="text-white-50 small">Secure Access Only</p>
+            </div>
+            <form id="loginForm" onsubmit="return validateLogin(event)">
+                <div class="input-group-custom mb-4">
+                    <span class="input-icon"><i class="fas fa-user-astronaut"></i></span>
+                    <input type="text" class="form-control-glass" id="userId" name="userId" placeholder="Admin ID" required autocomplete="off" />
+                </div>
+                <div class="input-group-custom mb-4">
+                    <span class="input-icon"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control-glass" id="password" name="password" placeholder="Password" required autocomplete="off" />
+                </div>
+                <button type="submit" class="btn-login-glow w-100">
+                    <span class="btn-text">Unlock Dashboard</span>
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+                <div class="error-msg mt-3 text-center small" id="loginError"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Card Popup -->
+    <div id="cardPopup">
+        <div class="popup-content" role="dialog" aria-modal="true" aria-labelledby="cardTitle">
+            <span class="close-btn" aria-label="Close visiting card popup" role="button" tabindex="0" onclick="hideCardPopup()">&times;</span>
+            <h2 id="cardTitle">Visiting Card</h2>
+            <div class="card-images row g-3 mb-4">
+                <div class="col-6">
+                    <img src="1.png" alt="Front of the visiting card" onclick="openImageViewer(this.src)">
+                </div>
+                <div class="col-6">
+                    <img src="2.png" alt="Back of the visiting card" onclick="openImageViewer(this.src)">
+                </div>
+            </div>
+            <a href="visiting-card.zip" download class="btn-download">Download</a>
+        </div>
+    </div>
+
+    <!-- Image Viewer -->
+    <div id="imageViewer">
+        <span class="close-viewer-btn" onclick="closeImageViewer()">&times;</span>
+        <img id="fullScreenImage" src="" alt="Full-screen view">
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
 </html>
