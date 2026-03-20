@@ -6,6 +6,5 @@ node_modules
 *.temp.js
 c:\tmp\check_mongo.js
 c:\tmp\fix_admin_script.js
-package-lock.json
 *.log
 .DS_Store
