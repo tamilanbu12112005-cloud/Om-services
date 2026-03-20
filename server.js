@@ -60,18 +60,16 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
   next();
 });
-app.use(express.static(path.join(__dirname, ".")));
-app.use(express.static(path.join(__dirname, "public")));
-
-// Request Logger - MUST BE BEFORE ROUTES
+// Request Logger - MUST BE FIRST
 app.use((req, res, next) => {
   const timestamp = new Date().toLocaleTimeString();
   console.log(`[${timestamp}] ${req.method} ${req.path}`);
-  if (req.method === "POST" && req.body) {
-    console.log("📦 Request Body:", JSON.stringify(req.body, null, 2));
-  }
   next();
 });
+
+// Priority 1: Serve from /public folder (CSS, JS, assets)
+app.use(express.static(path.join(__dirname, "public")));
+
 
 // ===== MONGODB CONNECTION =====
 console.log("🔌 Connecting to MongoDB...");
@@ -1219,14 +1217,19 @@ app.delete("/api/page-content/:pageId/image", async (req, res) => {
 });
 
 // ===== PAGE ROUTES =====
-// Serve root assets like Images, logo, etc.
-app.get("/:file.:ext(png|jpg|jpeg|gif|ico|svg)", (req, res, next) => {
-  const filePath = path.join(__dirname, req.params.file + "." + req.params.ext);
-  if (require("fs").existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    next();
+// Serve root assets like Images, logo, etc. (Explicitly check extensions)
+app.get("/:file", (req, res, next) => {
+  const fileName = req.params.file;
+  const ext = fileName.split(".").pop().toLowerCase();
+  const allowedExtensions = ["png", "jpg", "jpeg", "gif", "ico", "svg"];
+
+  if (allowedExtensions.includes(ext)) {
+    const filePath = path.join(__dirname, fileName);
+    if (require("fs").existsSync(filePath)) {
+      return res.sendFile(filePath);
+    }
   }
+  next();
 });
 
 // Serve all .html files from the root directory
@@ -1238,6 +1241,7 @@ app.get("/:page.html", (req, res) => {
     res.status(404).send("Page not found");
   }
 });
+
 
 // Also serve plain names as .html (e.g. /about -> about.html)
 const commonPages = ["signin", "about", "contact", "user-dashboard", "reviews", "go", "join", "offers", "review"];
