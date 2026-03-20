@@ -737,8 +737,27 @@ app.post(
 
       // Add file path if image uploaded
       if (req.file) {
-        console.log("📸 New Profile Image:", req.file.filename);
-        updateData.profileImage = "/uploads/" + req.file.filename;
+        console.log("📸 New Profile Image Uploaded:", req.file.filename);
+        
+        // --- FIX FOR CLOUD HOSTING (Railway/Render) ---
+        // Instead of storing a local path (which disappears on restart), 
+        // we store the image as a Base64 string directly in MongoDB.
+        try {
+          const filePath = path.join(__dirname, "uploads", req.file.filename);
+          const fileBuffer = fs.readFileSync(filePath);
+          const mimeType = req.file.mimetype;
+          const base64Image = `data:${mimeType};base64,${fileBuffer.toString('base64')}`;
+          
+          updateData.profileImage = base64Image;
+          
+          // Clean up the temporary file from server disk
+          fs.unlinkSync(filePath);
+          console.log("✅ Image converted to Base64 and temporary file deleted");
+        } catch (fsErr) {
+          console.error("⚠️ Error processing image for Base64:", fsErr);
+          // Fallback to local path if conversion fails
+          updateData.profileImage = "/uploads/" + req.file.filename;
+        }
       }
 
       console.log(`[UPDATE] Email=${normalizedEmail}`);
@@ -763,9 +782,22 @@ app.post("/api/join", upload.array("images", 5), async (req, res) => {
   try {
     console.log("🤝 New Partner Request:", req.body.category, req.body.name);
 
-    // Handle file uploads
+    // Handle file uploads (Convert to Base64 for permanent cloud storage)
     const imagePaths = req.files
-      ? req.files.map((file) => "/uploads/" + file.filename)
+      ? req.files.map((file) => {
+          try {
+            const filePath = path.join(__dirname, "uploads", file.filename);
+            const fileBuffer = fs.readFileSync(filePath);
+            const base64 = `data:${file.mimetype};base64,${fileBuffer.toString('base64')}`;
+            
+            // Clean up disk
+            fs.unlinkSync(filePath);
+            return base64;
+          } catch (e) {
+            console.error("⚠️ Error converting partner image:", e);
+            return "/uploads/" + file.filename;
+          }
+        })
       : [];
 
     // Handle potentially duplicate fields (like 'details') which might come as an array
