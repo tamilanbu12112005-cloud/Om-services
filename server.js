@@ -224,6 +224,13 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
 });
 
+// Memory storage for profile images to avoid disk issues on cloud platforms (Vercel/Render)
+const memoryStorage = multer.memoryStorage();
+const uploadMemory = multer({
+  storage: memoryStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }
+});
+
 // Serve uploads folder statically
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
@@ -713,7 +720,7 @@ app.get("/api/user-by-email/:email", async (req, res) => {
 
 app.post(
   "/api/user/update",
-  upload.single("profileImage"),
+  uploadMemory.single("profileImage"),
   async (req, res) => {
     try {
       console.log("🔄 Profile Update Request");
@@ -735,29 +742,12 @@ app.post(
       updateData.updatedAt = Date.now();
       updateData.isProfileComplete = true;
 
-      // Add file path if image uploaded
+      // Add file as Base64 if image uploaded (Stops using disk, stores in MongoDB)
       if (req.file) {
-        console.log("📸 New Profile Image Uploaded:", req.file.filename);
-        
-        // --- FIX FOR CLOUD HOSTING (Railway/Render) ---
-        // Instead of storing a local path (which disappears on restart), 
-        // we store the image as a Base64 string directly in MongoDB.
-        try {
-          const filePath = path.join(__dirname, "uploads", req.file.filename);
-          const fileBuffer = fs.readFileSync(filePath);
-          const mimeType = req.file.mimetype;
-          const base64Image = `data:${mimeType};base64,${fileBuffer.toString('base64')}`;
-          
+          console.log("📸 Processing new profile image (Memory -> Base64)");
+          const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
           updateData.profileImage = base64Image;
-          
-          // Clean up the temporary file from server disk
-          fs.unlinkSync(filePath);
-          console.log("✅ Image converted to Base64 and temporary file deleted");
-        } catch (fsErr) {
-          console.error("⚠️ Error processing image for Base64:", fsErr);
-          // Fallback to local path if conversion fails
-          updateData.profileImage = "/uploads/" + req.file.filename;
-        }
+          console.log("✅ Image converted to Base64 (Stored in MongoDB)");
       }
 
       console.log(`[UPDATE] Email=${normalizedEmail}`);
@@ -768,8 +758,12 @@ app.post(
         { new: true, upsert: true, setDefaultsOnInsert: true },
       );
 
-      console.log("✅ Profile updated:", user._id);
-      res.json({ success: true, user });
+      // Remove password hash from response
+      const safeUser = user.toObject();
+      delete safeUser.password;
+
+      console.log("✅ Profile saved to MongoDB:", user._id);
+      res.json({ success: true, user: safeUser });
     } catch (err) {
       console.error("❌ Profile update error:", err);
       res.status(500).json({ error: "Database update failed" });
@@ -778,25 +772,14 @@ app.post(
 );
 
 // ===== JOIN / PARTNER ROUTES =====
-app.post("/api/join", upload.array("images", 5), async (req, res) => {
+app.post("/api/join", uploadMemory.array("images", 5), async (req, res) => {
   try {
     console.log("🤝 New Partner Request:", req.body.category, req.body.name);
 
-    // Handle file uploads (Convert to Base64 for permanent cloud storage)
+    // Handle file uploads (Convert from Memory Buffer to Base64 for permanent MongoDB storage)
     const imagePaths = req.files
       ? req.files.map((file) => {
-          try {
-            const filePath = path.join(__dirname, "uploads", file.filename);
-            const fileBuffer = fs.readFileSync(filePath);
-            const base64 = `data:${file.mimetype};base64,${fileBuffer.toString('base64')}`;
-            
-            // Clean up disk
-            fs.unlinkSync(filePath);
-            return base64;
-          } catch (e) {
-            console.error("⚠️ Error converting partner image:", e);
-            return "/uploads/" + file.filename;
-          }
+          return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
         })
       : [];
 
@@ -816,7 +799,7 @@ app.post("/api/join", upload.array("images", 5), async (req, res) => {
     const newPartner = new Partner(partnerData);
     await newPartner.save();
 
-    console.log("✅ Partner request saved:", newPartner._id);
+    console.log("✅ Partner request saved to MongoDB:", newPartner._id);
 
     // Send welcome email
     if (req.body.email) {

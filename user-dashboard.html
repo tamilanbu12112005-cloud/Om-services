@@ -1175,6 +1175,13 @@
                 });
 
                 if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && data.user) {
+                        // Sync with localStorage so navbar and other pages get updated info
+                        localStorage.setItem('serviceUser', JSON.stringify(data.user));
+                        window.__authUser = data.user;
+                    }
+
                     btn.innerHTML = '<i class="fas fa-check me-2"></i>Saved!';
                     btn.classList.add('btn-success');
 
