@@ -981,7 +981,7 @@
                     document.getElementById('prof-address').value = profileData.location || '';
                     document.getElementById('display-name').textContent = profileData.name || user.name || user.email?.split('@')[0] || 'User';
 
-                    if (profileData.profileImage) {
+                    if (profileData.profileImage && profileData.profileImage.startsWith('data:')) {
                         document.getElementById('user-avatar').src = profileData.profileImage;
                     }
                 }

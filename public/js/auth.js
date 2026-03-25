@@ -60,11 +60,13 @@ async function setupUserUI() {
     window.__authUser = user;
 
     if (user) {
-        const avatarUrl = user.profileImage || "";
+        // Only use profileImage if it's a valid Base64 data URL (old /uploads/ paths won't work on cloud)
+        const avatarUrl = (user.profileImage && user.profileImage.startsWith("data:")) ? user.profileImage : "";
         const displayName = user.name || user.email?.split("@")[0] || "User";
+        const initialsFallback = `<div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:14px;border:1px solid rgba(255,255,255,0.2);">${displayName[0].toUpperCase()}</div>`;
         const avatarHtml = avatarUrl
-            ? `<img src="${avatarUrl}" alt="Avatar" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);object-fit:cover;">`
-            : `<div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:14px;border:1px solid rgba(255,255,255,0.2);">${displayName[0].toUpperCase()}</div>`;
+            ? `<img src="${avatarUrl}" alt="Avatar" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);object-fit:cover;" onerror="this.outerHTML=\`${initialsFallback.replace(/`/g, '\\`')}\`">`
+            : initialsFallback;
 
         userButtonDiv.innerHTML = `
             <div class="dropdown">
