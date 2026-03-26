@@ -1,6 +1,6 @@
 // API Configuration — auto-detect local vs production
 const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-window.VITE_API_URL = isLocal ? window.location.origin : "https://om-services-z0no.onrender.com";
+window.VITE_API_URL = isLocal ? window.location.origin : "https://om-services-production.up.railway.app";
 const API_BASE_URL = window.VITE_API_URL;
 window.API_BASE_URL = API_BASE_URL;
 console.log("🔗 API Base URL:", API_BASE_URL);

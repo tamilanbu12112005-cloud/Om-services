@@ -26,8 +26,8 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:3000",
     "http://localhost:3001",
-    "https://om-services-z0no.onrender.com",
-    "https://om-services.onrender.com",
+    "https://om-services-production.up.railway.app",
+    /\.railway\.app$/,
     /\.vercel\.app$/,
   ];
 
@@ -55,7 +55,7 @@ app.use((req, res, next) => {
       "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com; " +
       "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; " +
       "img-src 'self' data: blob: https://i.imgur.com; " +
-      "connect-src 'self' https://cdn.jsdelivr.net https://om-services-z0no.onrender.com https://om-services.onrender.com;",
+      "connect-src 'self' https://cdn.jsdelivr.net https://om-services-production.up.railway.app;",
   );
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
   next();
@@ -1291,21 +1291,17 @@ app.get("/admin", (req, res) => {
 
 
 // ===== START SERVER =====
-if (process.env.VERCEL) {
-  // Vercel serverless environments require exporting the app instead of listening
-  module.exports = app;
-} else {
-  app.listen(PORT, () => {
-    console.log("\n" + "=".repeat(50));
-    console.log("🚀 OM SERVICE - SERVER STARTED");
-    console.log("=".repeat(50));
-    console.log(`📍 Port: ${PORT}`);
-    console.log(`🔗 URL: http://localhost:${PORT}`);
-    console.log(`🔗 Admin: http://localhost:${PORT}/admin.html`);
-    console.log(`🔗 Test: http://localhost:${PORT}/test-bookings.html`);
-    console.log("=".repeat(50) + "\n");
-  });
-}
+app.listen(PORT, () => {
+  console.log("\n" + "=".repeat(50));
+  console.log("🚀 OM SERVICE - SERVER STARTED");
+  console.log("=".repeat(50));
+  console.log(`📍 Port: ${PORT}`);
+  console.log(`🔗 URL: http://localhost:${PORT}`);
+  console.log(`🔗 Admin: http://localhost:${PORT}/admin.html`);
+  console.log("=".repeat(50) + "\n");
+});
+
+module.exports = app;
 
 // Handle graceful shutdown
 process.on("SIGINT", async () => {
