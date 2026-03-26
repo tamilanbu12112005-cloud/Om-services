@@ -1,7 +1,9 @@
-// API Configuration
-window.VITE_API_URL = "https://om-services-z0no.onrender.com";
-const API_BASE_URL = window.VITE_API_URL || window.location.origin;
+// API Configuration — auto-detect local vs production
+const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+window.VITE_API_URL = isLocal ? window.location.origin : "https://om-services-z0no.onrender.com";
+const API_BASE_URL = window.VITE_API_URL;
 window.API_BASE_URL = API_BASE_URL;
+console.log("🔗 API Base URL:", API_BASE_URL);
 
 // Global Fetch Interceptor to handle cross-origin API calls automatically
 const originalFetch = window.fetch;

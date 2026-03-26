@@ -91,11 +91,23 @@ const mongoConnectOptions = {
   retryReads: true,
 };
 
+let isReconnecting = false; // Prevent duplicate reconnection loops
+
 async function connectMongoDB() {
+  if (isReconnecting) return; // Skip if already reconnecting
+  isReconnecting = true;
+
   try {
     await mongoose.connect(process.env.MONGODB_URI, mongoConnectOptions);
+    isReconnecting = false;
     console.log("✅ MongoDB Connected Successfully!");
-    console.log("📊 Database:", mongoose.connection.name);
+
+    // Get database name (Mongoose 9.x compatible)
+    const dbName = mongoose.connection.db?.databaseName 
+      || mongoose.connection.name 
+      || process.env.MONGODB_URI?.split('/').pop()?.split('?')[0] 
+      || 'unknown';
+    console.log("📊 Database:", dbName);
 
     try {
       // Wait for the connection to be fully established and the DB object to be available
@@ -125,6 +137,7 @@ async function connectMongoDB() {
       console.log("⚠️ Index cleanup info:", e.message);
     }
   } catch (err) {
+    isReconnecting = false;
     console.error("❌ MongoDB Connection FAILED:", err.message);
     console.error("💡 Retrying in 10 seconds...");
     setTimeout(connectMongoDB, 10000); // Auto-retry after 10s
@@ -135,20 +148,23 @@ connectMongoDB();
 
 // Monitor MongoDB connection status
 mongoose.connection.on("connected", () => {
+  isReconnecting = false;
   console.log("🟢 Mongoose connected to MongoDB");
 });
 
 mongoose.connection.on("error", (err) => {
-  console.error("🔴 Mongoose connection error:", err);
+  // Log only the error message, not the full topology object
+  console.error("🔴 Mongoose connection error:", err.message || err);
 });
 
 mongoose.connection.on("disconnected", () => {
-  console.log("🟡 Mongoose disconnected — attempting reconnect in 5s...");
-  // Log more details if available
-  if (mongoose.connection && mongoose.connection.readyState !== undefined) {
-    console.log("🟡 Mongoose readyState:", mongoose.connection.readyState);
+  console.log("🟡 Mongoose disconnected");
+  console.log("🟡 Mongoose readyState:", mongoose.connection.readyState);
+  // Only attempt reconnect if not already doing so
+  if (!isReconnecting) {
+    console.log("💡 Attempting reconnect in 5s...");
+    setTimeout(connectMongoDB, 5000);
   }
-  setTimeout(connectMongoDB, 5000); // Auto-reconnect after 5s
 });
 
 // ===== SCHEMAS =====
