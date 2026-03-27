@@ -560,7 +560,7 @@ app.post("/api/auth/send-otp", async (req, res) => {
     res.json({ success: true, message: "OTP sent to email." });
   } catch(err) {
     console.error("❌ Send OTP Error:", err);
-    res.status(500).json({ error: "Failed to send OTP." });
+    res.status(500).json({ error: "Failed to send OTP.", details: err.message || err.toString() });
   }
 });
 
